@@ -4,22 +4,21 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         TaskManager taskManager = new TaskManager();
-        Task task = new Task("Переезд", "Собрать вещи, перевезти, разобрать", "new");
+        Task task = new Task(0, "Переезд", "Собрать вещи, перевезти, разобрать");
         taskManager.createTask(task);
-        EpicTask epicTask = new EpicTask("Обучение Java",
-                "выбрать курс, пройти курс, усвоить весь материал", "new", null);
+        EpicTask epicTask = new EpicTask(0, "Обучение Java",
+                "выбрать курс, пройти курс, усвоить весь материал", null);
         taskManager.createEpicTask(epicTask);
-        epicTask = new EpicTask("Выучить уроки", "усвоить весь материал", "new",
+        epicTask = new EpicTask(0, "Выучить уроки", "усвоить весь материал",
                 null);
         taskManager.createEpicTask(epicTask);
-        SubTask subTask = new SubTask("Выбрать курс", "изучить всех поставщиков курсов",
-                "done", 3);
-        taskManager.createSubTask(subTask);
-        subTask = new SubTask("Пройти курс", "выполнить все задания", "new",
+        SubTask subTask = new SubTask(0, "Выбрать курс", "изучить всех поставщиков курсов",
                 3);
         taskManager.createSubTask(subTask);
-        subTask = new SubTask("Найти учебник", "открыть учебник/закрыть учебник", "new",
-                4);
+        subTask = new SubTask(0, "Пройти курс", "выполнить все задания", 3);
+        taskManager.createSubTask(subTask);
+        subTask = new SubTask(0, "Найти учебник", "открыть учебник/закрыть учебник",
+                2);
         taskManager.createSubTask(subTask);
 
         while (true) {
