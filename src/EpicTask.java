@@ -5,9 +5,8 @@ public class EpicTask extends Task {
     private ArrayList<Integer> subTaskIdentificator;
 
 
-    public EpicTask(int taskId, String taskName, String taskDescription, ArrayList<Integer> subTaskIdentificator) {
+    public EpicTask(int taskId, String taskName, String taskDescription) {
         super(taskId, taskName, taskDescription);
-        this.subTaskIdentificator = subTaskIdentificator;
     }
 
     @Override

@@ -7,10 +7,9 @@ public class Main {
         Task task = new Task(0, "Переезд", "Собрать вещи, перевезти, разобрать");
         taskManager.createTask(task);
         EpicTask epicTask = new EpicTask(0, "Обучение Java",
-                "выбрать курс, пройти курс, усвоить весь материал", null);
+                "выбрать курс, пройти курс, усвоить весь материал");
         taskManager.createEpicTask(epicTask);
-        epicTask = new EpicTask(0, "Выучить уроки", "усвоить весь материал",
-                null);
+        epicTask = new EpicTask(0, "Выучить уроки", "усвоить весь материал");
         taskManager.createEpicTask(epicTask);
         SubTask subTask = new SubTask(0, "Выбрать курс", "изучить всех поставщиков курсов",
                 3);
