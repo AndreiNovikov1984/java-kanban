@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        TaskManager taskManager = new TaskManager();
+        InMemoryTaskManager taskManager = new InMemoryTaskManager();
         Task task = new Task(0, "Переезд", "Собрать вещи, перевезти, разобрать");
         taskManager.createTask(task);
         EpicTask epicTask = new EpicTask(0, "Обучение Java",

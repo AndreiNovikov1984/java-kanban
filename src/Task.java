@@ -4,7 +4,6 @@ public class Task {
     protected String taskDescription;
     protected String taskStatus = "new";
 
-
     public Task(int taskId, String taskName, String taskDescription) {
         this.taskId = taskId;
         this.taskName = taskName;
