@@ -170,7 +170,6 @@ public class InMemoryTaskManager implements TaskManager {
             subTaskNumberTemporary = listEpicTask.get(taskIdentificator).getSubTaskIdentificator();
             for (Integer number : subTaskNumberTemporary) {
                 System.out.println(listSubTask.get(number));
-                //             inMemoryHistoryManager.add(listSubTask.get(number));
             }
         } else {
             System.out.println("У данного эпика нет подзадач");
