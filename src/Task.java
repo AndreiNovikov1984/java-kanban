@@ -1,8 +1,8 @@
 public class Task {
     protected int taskId;
-    protected String taskName;
-    protected String taskDescription;
-    protected String taskStatus = "new";
+    protected final String taskName;
+    protected final String taskDescription;
+    protected StatusTask taskStatus = StatusTask.NEW;
 
     public Task(int taskId, String taskName, String taskDescription) {
         this.taskId = taskId;

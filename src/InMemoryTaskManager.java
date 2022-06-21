@@ -1,93 +1,110 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private HashMap<Integer, Task> listTask = new HashMap<>();
-    private HashMap<Integer, EpicTask> listEpicTask = new HashMap<>();
-    private HashMap<Integer, SubTask> listSubTask = new HashMap<>();
+    private Map<Integer, Task> listTask = new HashMap<>();
+    private Map<Integer, EpicTask> listEpicTask = new HashMap<>();
+    private Map<Integer, SubTask> listSubTask = new HashMap<>();
+    InMemoryHistoryManager historyManager = Managers.getDefaultHistory();
     static Integer identificator = 0;
 
+    @Override
     public void getlistTask() { // метод вывода списка задач
         for (int taskNumber : listTask.keySet()) {
             System.out.println("ID " + taskNumber + ", задача - " + listTask.get(taskNumber).taskName);
         }
     }
 
+    @Override
     public void getlistEpicTask() { // метод вывода списка эпиков
         for (int epicTaskNumber : listEpicTask.keySet()) {
             System.out.println("ID " + epicTaskNumber + ", эпик - " + listEpicTask.get(epicTaskNumber).taskName);
         }
     }
 
+    @Override
     public void getlistSubTask() { // метод вывода списка подзадач
         for (int subTaskNumber : listSubTask.keySet()) {
             System.out.println("ID " + subTaskNumber + ", подзадача - " + listSubTask.get(subTaskNumber).taskName);
         }
     }
 
+    @Override
     public void clearTaskList() {  // метод удаления всего списка задач
         listTask.clear();
     }
 
+    @Override
     public void clearEpicTaskList() {  // метод удаления всего списка эпиков
         listEpicTask.clear();
         listSubTask.clear();
     }
 
+    @Override
     public void clearSubTaskList() {  // метод удаления всего списка подзадач
         listSubTask.clear();
         for (int epicTaskNumber : listEpicTask.keySet()) {
             listEpicTask.get(epicTaskNumber).setSubTaskIdentificator(null);
-            listEpicTask.get(epicTaskNumber).taskStatus = "new";
+            listEpicTask.get(epicTaskNumber).taskStatus = StatusTask.NEW;
         }
     }
 
+    @Override
     public void getTaskByNumber(int taskIdentificator) { // метод получения данных о задаче по идентификатору
         for (int taskNumber : listTask.keySet()) {
             if (taskNumber == taskIdentificator) {
                 System.out.println(listTask.get(taskNumber));
+                historyManager.add(listTask.get(taskNumber));
             }
         }
         for (int epicTaskNumber : listEpicTask.keySet()) {
             if (epicTaskNumber == taskIdentificator) {
                 System.out.println(listEpicTask.get(epicTaskNumber));
+                historyManager.add(listEpicTask.get(epicTaskNumber));
             }
         }
         for (int subTaskNumber : listSubTask.keySet()) {
             if (subTaskNumber == taskIdentificator) {
                 System.out.println(listSubTask.get(subTaskNumber));
+                historyManager.add(listSubTask.get(subTaskNumber));
             }
         }
     }
 
+    @Override
     public void createTask(Task task) {      // метод создания задачи
         task.taskId = ++identificator;
         listTask.put(task.taskId, task);
         System.out.println(listTask.get(task.taskId));
     }
 
-    public void createEpicTask(EpicTask epicTask) {  // метод создания эпика
+    @Override
+    public void createTask(EpicTask epicTask) {  // метод создания эпика
         epicTask.taskId = ++identificator;
         listEpicTask.put(epicTask.taskId, epicTask);
         System.out.println(listEpicTask.get(epicTask.taskId));
     }
 
-    public void createSubTask(SubTask subTask) {        // метод создания подзадачи
+    @Override
+    public void createTask(SubTask subTask) {        // метод создания подзадачи
         subTask.taskId = ++identificator;
         listSubTask.put(subTask.taskId, subTask);
         System.out.println(listSubTask.get(subTask.taskId));
         refreshTask(listEpicTask.get(subTask.getEpikTaskIdentificator()));
     }
 
+    @Override
     public void refreshTask(Task task) {                    // метод обновление задачи
         listTask.put(task.taskId, task);
         System.out.println("Задача обновлена");
     }
 
+    @Override
     public void refreshTask(EpicTask epicTask) {                // метод обновление эпика
         ArrayList<Integer> subTaskNumberTemporary = new ArrayList<>();
-        ArrayList<String> subTaskStatusTemporary = new ArrayList<>();
+        ArrayList<StatusTask> subTaskStatusTemporary = new ArrayList<>();
         for (int subTaskNumber : listSubTask.keySet()) {
             if (listSubTask.get(subTaskNumber).getEpikTaskIdentificator() == epicTask.taskId) {
                 subTaskNumberTemporary.add(subTaskNumber);
@@ -95,7 +112,7 @@ public class InMemoryTaskManager implements TaskManager {
             }
         }
         if (subTaskStatusTemporary.size() == 0) {
-            listEpicTask.get(epicTask.taskId).taskStatus = "new";
+            listEpicTask.get(epicTask.taskId).taskStatus = StatusTask.NEW;
         } else {
             listEpicTask.get(epicTask.taskId).taskStatus = checkEpicStatus(subTaskStatusTemporary);
             ;
@@ -105,12 +122,14 @@ public class InMemoryTaskManager implements TaskManager {
         System.out.println("Эпик обновлен");
     }
 
+    @Override
     public void refreshTask(SubTask subTask) {       // метод обновление подзадачи
         listSubTask.put(subTask.taskId, subTask);
         System.out.println("Подзадача обновлена");
         refreshTask(listEpicTask.get(listSubTask.get(subTask.taskId).getEpikTaskIdentificator()));
     }
 
+    @Override
     public void clearTaskByNumber(int taskIdentificator) {  // метод удаление задачи по идентификатору
         for (int taskNumber : listTask.keySet()) {
             if (taskNumber == taskIdentificator) {
@@ -144,38 +163,44 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    @Override
     public void getSubTaskByEpicNumber(int taskIdentificator) {  // метод получения подзадач определенного эпика
         ArrayList<Integer> subTaskNumberTemporary = new ArrayList<>();
         if (listEpicTask.get(taskIdentificator).getSubTaskIdentificator() != null) {
             subTaskNumberTemporary = listEpicTask.get(taskIdentificator).getSubTaskIdentificator();
             for (Integer number : subTaskNumberTemporary) {
                 System.out.println(listSubTask.get(number));
+                //             inMemoryHistoryManager.add(listSubTask.get(number));
             }
         } else {
             System.out.println("У данного эпика нет подзадач");
         }
     }
 
-    public String checkEpicStatus(ArrayList<String> subTaskStatus) {    // метод обновления статуса эпика
-        String EpicStatus;
+    @Override
+    public StatusTask checkEpicStatus(ArrayList<StatusTask> subTaskStatus) {    // метод обновления статуса эпика
+        StatusTask EpicStatus;
         int countNew = 0;
         int countDone = 0;
-        for (String status : subTaskStatus) {
-            if (status.equals("new")) {
+        for (StatusTask status : subTaskStatus) {
+            if (status == StatusTask.NEW) {
                 countNew++;
-            } else if (status.equals("done")) {
+            } else if (status == StatusTask.DONE) {
                 countDone++;
             }
         }
         if (countNew == subTaskStatus.size()) {
-            EpicStatus = "new";
+            EpicStatus = StatusTask.NEW;
         } else if (countDone == subTaskStatus.size()) {
-            EpicStatus = "done";
+            EpicStatus = StatusTask.DONE;
         } else {
-            EpicStatus = "in progress";
+            EpicStatus = StatusTask.IN_PROGRESS;
         }
         return EpicStatus;
     }
 
-
+    @Override
+    public void getHistory() { // метод получения истории просмотров
+        historyManager.getHistory();
+    }
 }

@@ -3,22 +3,22 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        InMemoryTaskManager taskManager = new InMemoryTaskManager();
+        InMemoryTaskManager taskManager = Managers.getDefault();
         Task task = new Task(0, "Переезд", "Собрать вещи, перевезти, разобрать");
         taskManager.createTask(task);
         EpicTask epicTask = new EpicTask(0, "Обучение Java",
                 "выбрать курс, пройти курс, усвоить весь материал");
-        taskManager.createEpicTask(epicTask);
-        epicTask = new EpicTask(0, "Выучить уроки", "усвоить весь материал");
-        taskManager.createEpicTask(epicTask);
+        taskManager.createTask(epicTask);
+        epicTask = new EpicTask(0, "Выу8чить уроки", "усвоить весь материал");
+        taskManager.createTask(epicTask);
         SubTask subTask = new SubTask(0, "Выбрать курс", "изучить всех поставщиков курсов",
                 3);
-        taskManager.createSubTask(subTask);
+        taskManager.createTask(subTask);
         subTask = new SubTask(0, "Пройти курс", "выполнить все задания", 3);
-        taskManager.createSubTask(subTask);
+        taskManager.createTask(subTask);
         subTask = new SubTask(0, "Найти учебник", "открыть учебник/закрыть учебник",
                 2);
-        taskManager.createSubTask(subTask);
+        taskManager.createTask(subTask);
 
         while (true) {
             printMenu();
@@ -74,6 +74,8 @@ public class Main {
                 command = scanner.next();
                 int taskIdentificator = Integer.parseInt(command);
                 taskManager.getSubTaskByEpicNumber(taskIdentificator);
+            } else if (Integer.parseInt(command) == 8) {
+                taskManager.getHistory();
             } else if (Integer.parseInt(command) == 0) {
                 System.out.println("Выход");
                 break;
@@ -92,6 +94,7 @@ public class Main {
         System.out.println("5 - Обновление задачи");
         System.out.println("6 - Удаление задачи по идентификатору");
         System.out.println("7 - Вывод списка подзадач");
+        System.out.println("8 - Вывод списка истории просмотра");
         System.out.println("0 - Выход");
     }
 
