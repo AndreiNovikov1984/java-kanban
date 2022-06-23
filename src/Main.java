@@ -4,21 +4,17 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         InMemoryTaskManager taskManager = Managers.getDefault();
-        Task task = new Task(0, "Переезд", "Собрать вещи, перевезти, разобрать");
-        taskManager.createTask(task);
-        EpicTask epicTask = new EpicTask(0, "Обучение Java",
-                "выбрать курс, пройти курс, усвоить весь материал");
-        taskManager.createTask(epicTask);
-        epicTask = new EpicTask(0, "Выу8чить уроки", "усвоить весь материал");
-        taskManager.createTask(epicTask);
-        SubTask subTask = new SubTask(0, "Выбрать курс", "изучить всех поставщиков курсов",
-                3);
-        taskManager.createTask(subTask);
-        subTask = new SubTask(0, "Пройти курс", "выполнить все задания", 3);
-        taskManager.createTask(subTask);
-        subTask = new SubTask(0, "Найти учебник", "открыть учебник/закрыть учебник",
-                2);
-        taskManager.createTask(subTask);
+        taskManager.createTask(new Task(0, "Переезд", "Собрать вещи, перевезти, разобрать"));
+        //Task task = new Task(0, "Переезд", "Собрать вещи, перевезти, разобрать");
+        taskManager.createTask(new EpicTask(0, "Обучение Java",
+                "выбрать курс, пройти курс, усвоить весь материал"));
+        taskManager.createTask(new EpicTask(0, "Выу8чить уроки", "усвоить весь материал"));
+        taskManager.createTask(new SubTask(0, "Выбрать курс",
+                "изучить всех поставщиков курсов", 3));
+        taskManager.createTask(new SubTask(0, "Пройти курс", "выполнить все задания",
+                3));
+        taskManager.createTask(new SubTask(0, "Найти учебник",
+                "открыть учебник/закрыть учебник", 2));
 
         while (true) {
             printMenu();
@@ -63,7 +59,7 @@ public class Main {
             } else if (Integer.parseInt(command) == 4) {
             } else if (Integer.parseInt(command) == 5) {
                 System.out.println("Выберите задачу, которую необходимо обновить");
-                taskManager.refreshTask(epicTask);
+               // taskManager.refreshTask(epicTask);
             } else if (Integer.parseInt(command) == 6) {
                 System.out.println("Введите идентификатор задачи");
                 command = scanner.next();

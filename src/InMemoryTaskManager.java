@@ -7,8 +7,8 @@ public class InMemoryTaskManager implements TaskManager {
     private Map<Integer, Task> listTask = new HashMap<>();
     private Map<Integer, EpicTask> listEpicTask = new HashMap<>();
     private Map<Integer, SubTask> listSubTask = new HashMap<>();
-    InMemoryHistoryManager historyManager = Managers.getDefaultHistory();
-    static Integer identificator = 0;
+    private InMemoryHistoryManager historyManager = Managers.getDefaultHistory();
+    private static Integer identificator = 0;
 
     @Override
     public void getlistTask() { // метод вывода списка задач
@@ -176,8 +176,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    @Override
-    public StatusTask checkEpicStatus(ArrayList<StatusTask> subTaskStatus) {    // метод обновления статуса эпика
+    private StatusTask checkEpicStatus(ArrayList<StatusTask> subTaskStatus) {    // метод обновления статуса эпика
         StatusTask EpicStatus;
         int countNew = 0;
         int countDone = 0;
