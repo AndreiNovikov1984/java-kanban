@@ -1,3 +1,10 @@
+package Managers;
+
+import Tasks.Task;
+import Tasks.EpicTask;
+import Tasks.SubTask;
+import Tasks.StatusTask;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,21 +20,21 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void getlistTask() { // метод вывода списка задач
         for (int taskNumber : listTask.keySet()) {
-            System.out.println("ID " + taskNumber + ", задача - " + listTask.get(taskNumber).taskName);
+            System.out.println("ID " + taskNumber + ", задача - " + listTask.get(taskNumber).getTaskName());
         }
     }
 
     @Override
     public void getlistEpicTask() { // метод вывода списка эпиков
         for (int epicTaskNumber : listEpicTask.keySet()) {
-            System.out.println("ID " + epicTaskNumber + ", эпик - " + listEpicTask.get(epicTaskNumber).taskName);
+            System.out.println("ID " + epicTaskNumber + ", эпик - " + listEpicTask.get(epicTaskNumber).getTaskName());
         }
     }
 
     @Override
     public void getlistSubTask() { // метод вывода списка подзадач
         for (int subTaskNumber : listSubTask.keySet()) {
-            System.out.println("ID " + subTaskNumber + ", подзадача - " + listSubTask.get(subTaskNumber).taskName);
+            System.out.println("ID " + subTaskNumber + ", подзадача - " + listSubTask.get(subTaskNumber).getTaskName());
         }
     }
 
@@ -47,7 +54,7 @@ public class InMemoryTaskManager implements TaskManager {
         listSubTask.clear();
         for (int epicTaskNumber : listEpicTask.keySet()) {
             listEpicTask.get(epicTaskNumber).setSubTaskIdentificator(null);
-            listEpicTask.get(epicTaskNumber).taskStatus = StatusTask.NEW;
+            listEpicTask.get(epicTaskNumber).setTaskStatus(StatusTask.NEW);
         }
     }
 
@@ -75,29 +82,29 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void createTask(Task task) {      // метод создания задачи
-        task.taskId = ++identificator;
-        listTask.put(task.taskId, task);
-        System.out.println(listTask.get(task.taskId));
+        task.setTaskId(++identificator);
+        listTask.put(task.getTaskId(), task);
+        System.out.println(listTask.get(task.getTaskId()));
     }
 
     @Override
     public void createTask(EpicTask epicTask) {  // метод создания эпика
-        epicTask.taskId = ++identificator;
-        listEpicTask.put(epicTask.taskId, epicTask);
-        System.out.println(listEpicTask.get(epicTask.taskId));
+        epicTask.setTaskId(++identificator);
+        listEpicTask.put(epicTask.getTaskId(), epicTask);
+        System.out.println(listEpicTask.get(epicTask.getTaskId()));
     }
 
     @Override
     public void createTask(SubTask subTask) {        // метод создания подзадачи
-        subTask.taskId = ++identificator;
-        listSubTask.put(subTask.taskId, subTask);
-        System.out.println(listSubTask.get(subTask.taskId));
+        subTask.setTaskId(++identificator);
+        listSubTask.put(subTask.getTaskId(), subTask);
+        System.out.println(listSubTask.get(subTask.getTaskId()));
         refreshTask(listEpicTask.get(subTask.getEpikTaskIdentificator()));
     }
 
     @Override
     public void refreshTask(Task task) {                    // метод обновление задачи
-        listTask.put(task.taskId, task);
+        listTask.put(task.getTaskId(), task);
         System.out.println("Задача обновлена");
     }
 
@@ -106,27 +113,27 @@ public class InMemoryTaskManager implements TaskManager {
         ArrayList<Integer> subTaskNumberTemporary = new ArrayList<>();
         ArrayList<StatusTask> subTaskStatusTemporary = new ArrayList<>();
         for (int subTaskNumber : listSubTask.keySet()) {
-            if (listSubTask.get(subTaskNumber).getEpikTaskIdentificator() == epicTask.taskId) {
+            if (listSubTask.get(subTaskNumber).getEpikTaskIdentificator() == epicTask.getTaskId()) {
                 subTaskNumberTemporary.add(subTaskNumber);
-                subTaskStatusTemporary.add(listSubTask.get(subTaskNumber).taskStatus);
+                subTaskStatusTemporary.add(listSubTask.get(subTaskNumber).getTaskStatus());
             }
         }
         if (subTaskStatusTemporary.size() == 0) {
-            listEpicTask.get(epicTask.taskId).taskStatus = StatusTask.NEW;
+            listEpicTask.get(epicTask.getTaskId()).setTaskStatus(StatusTask.NEW);
         } else {
-            listEpicTask.get(epicTask.taskId).taskStatus = checkEpicStatus(subTaskStatusTemporary);
+            listEpicTask.get(epicTask.getTaskId()).setTaskStatus(checkEpicStatus(subTaskStatusTemporary));
             ;
         }
-        listEpicTask.get(epicTask.taskId).setSubTaskIdentificator(subTaskNumberTemporary);
-        listEpicTask.put(epicTask.taskId, epicTask);
+        listEpicTask.get(epicTask.getTaskId()).setSubTaskIdentificator(subTaskNumberTemporary);
+        listEpicTask.put(epicTask.getTaskId(), epicTask);
         System.out.println("Эпик обновлен");
     }
 
     @Override
     public void refreshTask(SubTask subTask) {       // метод обновление подзадачи
-        listSubTask.put(subTask.taskId, subTask);
+        listSubTask.put(subTask.getTaskId(), subTask);
         System.out.println("Подзадача обновлена");
-        refreshTask(listEpicTask.get(listSubTask.get(subTask.taskId).getEpikTaskIdentificator()));
+        refreshTask(listEpicTask.get(listSubTask.get(subTask.getTaskId()).getEpikTaskIdentificator()));
     }
 
     @Override

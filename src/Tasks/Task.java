@@ -1,3 +1,5 @@
+package Tasks;
+
 public class Task {
     protected int taskId;
     protected final String taskName;
@@ -10,9 +12,29 @@ public class Task {
         this.taskDescription = taskDescription;
     }
 
+    public int getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(int taskId) {
+        this.taskId = taskId;
+    }
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public StatusTask getTaskStatus() {
+        return taskStatus;
+    }
+
+    public void setTaskStatus(StatusTask taskStatus) {
+        this.taskStatus = taskStatus;
+    }
+
     @Override
     public String toString() {
-        return "Task{" +
+        return "Tasks.Task{" +
                 "taskId='" + taskId + '\'' +
                 ", taskName='" + taskName + '\'' +
                 ", taskDescription='" + taskDescription.length() + '\'' +

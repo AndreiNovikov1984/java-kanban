@@ -1,3 +1,9 @@
+import Managers.Managers;
+import Managers.InMemoryTaskManager;
+import Tasks.Task;
+import Tasks.EpicTask;
+import Tasks.SubTask;
+
 import java.util.Scanner;
 
 public class Main {
@@ -5,10 +11,10 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         InMemoryTaskManager taskManager = Managers.getDefault();
         taskManager.createTask(new Task(0, "Переезд", "Собрать вещи, перевезти, разобрать"));
-        //Task task = new Task(0, "Переезд", "Собрать вещи, перевезти, разобрать");
+        //Tasks.Task task = new Tasks.Task(0, "Переезд", "Собрать вещи, перевезти, разобрать");
         taskManager.createTask(new EpicTask(0, "Обучение Java",
                 "выбрать курс, пройти курс, усвоить весь материал"));
-        taskManager.createTask(new EpicTask(0, "Выу8чить уроки", "усвоить весь материал"));
+        taskManager.createTask(new EpicTask(0, "Выучить уроки", "усвоить весь материал"));
         taskManager.createTask(new SubTask(0, "Выбрать курс",
                 "изучить всех поставщиков курсов", 3));
         taskManager.createTask(new SubTask(0, "Пройти курс", "выполнить все задания",
@@ -59,7 +65,7 @@ public class Main {
             } else if (Integer.parseInt(command) == 4) {
             } else if (Integer.parseInt(command) == 5) {
                 System.out.println("Выберите задачу, которую необходимо обновить");
-               // taskManager.refreshTask(epicTask);
+                // taskManager.refreshTask(epicTask);
             } else if (Integer.parseInt(command) == 6) {
                 System.out.println("Введите идентификатор задачи");
                 command = scanner.next();

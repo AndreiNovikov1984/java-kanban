@@ -1,4 +1,8 @@
-import java.util.ArrayList;
+package Managers;
+
+import Tasks.Task;
+import Tasks.EpicTask;
+import Tasks.SubTask;
 
 public interface TaskManager {
 
