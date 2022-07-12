@@ -40,17 +40,27 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void clearTaskList() {  // метод удаления всего списка задач
+        for (int taskNumber : listTask.keySet()) {
+            historyManager.remove(taskNumber);
+        }
         listTask.clear();
     }
 
     @Override
     public void clearEpicTaskList() {  // метод удаления всего списка эпиков
+        for (int taskNumber : listEpicTask.keySet()) {
+            historyManager.remove(taskNumber);
+        }
+
         listEpicTask.clear();
-        listSubTask.clear();
+        clearSubTaskList();
     }
 
     @Override
     public void clearSubTaskList() {  // метод удаления всего списка подзадач
+        for (int taskNumber : listSubTask.keySet()) {
+            historyManager.remove(taskNumber);
+        }
         listSubTask.clear();
         for (int epicTaskNumber : listEpicTask.keySet()) {
             listEpicTask.get(epicTaskNumber).setSubTaskIdentificator(null);
@@ -142,6 +152,7 @@ public class InMemoryTaskManager implements TaskManager {
             if (taskNumber == taskIdentificator) {
                 listTask.remove(taskNumber);
                 System.out.println("Задача ID - " + taskNumber + " удалена");
+                historyManager.remove(taskNumber);
                 return;
             }
         }
@@ -152,9 +163,11 @@ public class InMemoryTaskManager implements TaskManager {
                     subTaskNumberTemporary = listEpicTask.get(epicTaskNumber).getSubTaskIdentificator();
                     for (int Number : subTaskNumberTemporary) {
                         listSubTask.remove(Number);
+                        historyManager.remove(Number);
                     }
                 }
                 listEpicTask.remove(epicTaskNumber);
+                historyManager.remove(epicTaskNumber);
                 System.out.println("Эпик ID - " + epicTaskNumber + " удален");
                 return;
             }
@@ -163,6 +176,7 @@ public class InMemoryTaskManager implements TaskManager {
             if (subTaskNumber == taskIdentificator) {
                 int epikTaskIdentificatorTemporary = listSubTask.get(subTaskNumber).getEpikTaskIdentificator();
                 listSubTask.remove(subTaskNumber);
+                historyManager.remove(subTaskNumber);
                 System.out.println("Подзадача ID - " + subTaskNumber + " удалена");
                 refreshTask(listEpicTask.get(epikTaskIdentificatorTemporary));
                 return;
