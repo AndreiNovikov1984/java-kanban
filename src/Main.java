@@ -20,7 +20,7 @@ public class Main {
         taskManager.createTask(new SubTask(0, "Пройти курс", "выполнить все задания",
                 3));
         taskManager.createTask(new SubTask(0, "Найти учебник",
-                "открыть учебник/закрыть учебник", 2));
+                "открыть учебник/закрыть учебник", 3));
 
         while (true) {
             printMenu();

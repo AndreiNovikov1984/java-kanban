@@ -220,6 +220,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void getHistory() { // метод получения истории просмотров
-        historyManager.getHistory();
+        if (historyManager.getHistory() == null) {
+            System.out.println("Не было просмотрено ни одной задачи");
+        } else {
+            System.out.println("Были просмотрены следующие задачи:");
+            for (Task taskHistory : historyManager.getHistory()) {
+                System.out.println("ID задачи " + taskHistory.getTaskId() + ", название задачи " + taskHistory.getTaskName());
+            }
+        }
     }
 }
