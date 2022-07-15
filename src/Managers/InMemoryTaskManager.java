@@ -132,7 +132,6 @@ public class InMemoryTaskManager implements TaskManager {
             listEpicTask.get(epicTask.getTaskId()).setTaskStatus(StatusTask.NEW);
         } else {
             listEpicTask.get(epicTask.getTaskId()).setTaskStatus(checkEpicStatus(subTaskStatusTemporary));
-            ;
         }
         listEpicTask.get(epicTask.getTaskId()).setSubTaskIdentificator(subTaskNumberTemporary);
         listEpicTask.put(epicTask.getTaskId(), epicTask);
@@ -158,9 +157,8 @@ public class InMemoryTaskManager implements TaskManager {
         }
         for (int epicTaskNumber : listEpicTask.keySet()) {
             if (epicTaskNumber == taskIdentificator) {
-                ArrayList<Integer> subTaskNumberTemporary = new ArrayList<>();
                 if (listEpicTask.get(epicTaskNumber).getSubTaskIdentificator() != null) {
-                    subTaskNumberTemporary = listEpicTask.get(epicTaskNumber).getSubTaskIdentificator();
+                    ArrayList<Integer> subTaskNumberTemporary = listEpicTask.get(epicTaskNumber).getSubTaskIdentificator();
                     for (int Number : subTaskNumberTemporary) {
                         listSubTask.remove(Number);
                         historyManager.remove(Number);
@@ -186,9 +184,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void getSubTaskByEpicNumber(int taskIdentificator) {  // метод получения подзадач определенного эпика
-        ArrayList<Integer> subTaskNumberTemporary = new ArrayList<>();
         if (listEpicTask.get(taskIdentificator).getSubTaskIdentificator() != null) {
-            subTaskNumberTemporary = listEpicTask.get(taskIdentificator).getSubTaskIdentificator();
+            ArrayList<Integer> subTaskNumberTemporary = listEpicTask.get(taskIdentificator).getSubTaskIdentificator();
             for (Integer number : subTaskNumberTemporary) {
                 System.out.println(listSubTask.get(number));
             }

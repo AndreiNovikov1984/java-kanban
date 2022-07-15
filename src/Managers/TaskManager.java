@@ -6,15 +6,15 @@ import Tasks.SubTask;
 
 public interface TaskManager {
 
-    public void getlistTask();  // метод вывода списка задач?
+    void getlistTask();  // метод вывода списка задач?
 
-    public void getlistEpicTask();  // метод вывода списка эпиков
+    void getlistEpicTask();  // метод вывода списка эпиков
 
-    public void getlistSubTask();  // метод вывода списка подзадач
+    void getlistSubTask();  // метод вывода списка подзадач
 
-    public void clearTaskList();   // метод удаления всего списка задач
+    void clearTaskList();   // метод удаления всего списка задач
 
-    public void clearEpicTaskList();   // метод удаления всего списка эпиков
+    void clearEpicTaskList();   // метод удаления всего списка эпиков
 
     void clearSubTaskList();   // метод удаления всего списка подзадач
 

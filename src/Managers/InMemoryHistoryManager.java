@@ -10,19 +10,19 @@ public class InMemoryHistoryManager implements HistoryManager {
     private HashMap<Integer, Node> mapHistory = new HashMap<>();
     private List<Task> listHistory = new ArrayList<>();
     private static Integer historySize = 0;
-    static private Node tail;
-    static private Node head;
+    private static Node tail;
+    private static Node head;
 
-
+    @Override
     public void add(Task task) {                                // метод добавления задачи в историю просмотра
         if (mapHistory.containsKey(task.getTaskId())) {
             remove(task.getTaskId());
         }
         Node node = linkLast(new Node(null, task, null));
-        //    linkLast(node);
         mapHistory.put(task.getTaskId(), node);
     }
 
+    @Override
     public List<Task> getHistory() {                                // метод получения истории просмотра
         if (mapHistory.size() == 0) {
             return null;
@@ -32,6 +32,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
+    @Override
     public void remove(int id) {                             //метод удаления задачи из истории просмотра
         if (mapHistory.containsKey(id)) {
             Node.removeNode(mapHistory.get(id));
@@ -42,7 +43,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
-    public void getTasks() {                                     // метод перенос задач из узлов в список
+    private void getTasks() {                                     // метод перенос задач из узлов в список
         listHistory.clear();
         Node<Task> startElement = tail;
         int size = historySize;
@@ -53,7 +54,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
-    public Node linkLast(Node element) {                         // метод добавление узла в "конец"
+    private Node linkLast(Node element) {                         // метод добавление узла в "конец"
         final Node oldTail = tail;
         final Node newNode = new Node(oldTail, element.data, null);
         tail = newNode;

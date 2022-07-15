@@ -4,14 +4,10 @@ import Tasks.Task;
 import Tasks.EpicTask;
 import Tasks.SubTask;
 
-import java.util.Scanner;
-
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
         InMemoryTaskManager taskManager = Managers.getDefault();
         taskManager.createTask(new Task(0, "Переезд", "Собрать вещи, перевезти, разобрать"));
-        //Tasks.Task task = new Tasks.Task(0, "Переезд", "Собрать вещи, перевезти, разобрать");
         taskManager.createTask(new EpicTask(0, "Обучение Java",
                 "выбрать курс, пройти курс, усвоить весь материал"));
         taskManager.createTask(new EpicTask(0, "Выучить уроки", "усвоить весь материал"));
@@ -21,90 +17,22 @@ public class Main {
                 3));
         taskManager.createTask(new SubTask(0, "Найти учебник",
                 "открыть учебник/закрыть учебник", 3));
-
-        while (true) {
-            printMenu();
-            String command = scanner.next();
-            if (Integer.parseInt(command) == 1) {
-                printSubMenu();
-                command = scanner.next();
-                switch (Integer.parseInt(command)) {
-                    case 1:
-                        taskManager.getlistTask();
-                        break;
-                    case 2:
-                        taskManager.getlistEpicTask();
-                        break;
-                    case 3:
-                        taskManager.getlistSubTask();
-                        break;
-                    default:
-                        break;
-                }
-            } else if (Integer.parseInt(command) == 2) {
-                printSubMenu();
-                command = scanner.next();
-                switch (Integer.parseInt(command)) {
-                    case 1:
-                        taskManager.clearTaskList();
-                        break;
-                    case 2:
-                        taskManager.clearEpicTaskList();
-                        break;
-                    case 3:
-                        taskManager.clearSubTaskList();
-                        break;
-                    default:
-                        break;
-                }
-            } else if (Integer.parseInt(command) == 3) {
-                System.out.println("Введите идентификатор задачи");
-                command = scanner.next();
-                int taskIdentificator = Integer.parseInt(command);
-                taskManager.getTaskByNumber(taskIdentificator);
-            } else if (Integer.parseInt(command) == 4) {
-            } else if (Integer.parseInt(command) == 5) {
-                System.out.println("Выберите задачу, которую необходимо обновить");
-                // taskManager.refreshTask(epicTask);
-            } else if (Integer.parseInt(command) == 6) {
-                System.out.println("Введите идентификатор задачи");
-                command = scanner.next();
-                int taskIdentificator = Integer.parseInt(command);
-                taskManager.clearTaskByNumber(taskIdentificator);
-            } else if (Integer.parseInt(command) == 7) {
-                System.out.println("Введите идентификатор эпика");
-                command = scanner.next();
-                int taskIdentificator = Integer.parseInt(command);
-                taskManager.getSubTaskByEpicNumber(taskIdentificator);
-            } else if (Integer.parseInt(command) == 8) {
-                taskManager.getHistory();
-            } else if (Integer.parseInt(command) == 0) {
-                System.out.println("Выход");
-                break;
-            } else {
-                System.out.println("Извините, такой команды пока нет.");
-            }
-        }
-    }
-
-    public static void printMenu() {   // метод печати меню
-        System.out.println("Что вы хотите сделать? ");
-        System.out.println("1 - Получение списка всех задач");
-        System.out.println("2 - Удаление всех задач");
-        System.out.println("3 - Получение данных о задаче по идентификатору");
-        System.out.println("4 - Создание задачи");
-        System.out.println("5 - Обновление задачи");
-        System.out.println("6 - Удаление задачи по идентификатору");
-        System.out.println("7 - Вывод списка подзадач");
-        System.out.println("8 - Вывод списка истории просмотра");
-        System.out.println("0 - Выход");
-    }
-
-    public static void printSubMenu() {   // метод печати подменю
-        System.out.println("Выберите тип нужной задачи");
-        System.out.println("1 - Задача");
-        System.out.println("2 - Эпик");
-        System.out.println("3 - Подзадача");
-        System.out.println("Чтобы вернуться назад, нажмите любую другую цифру");
+        taskManager.createTask(new Task(0, "Покупка стола", "Выбрать стол, купить, привезти"));
+        taskManager.getTaskByNumber(1);
+        taskManager.getTaskByNumber(2);
+        taskManager.getTaskByNumber(3);
+        taskManager.getTaskByNumber(7);
+        taskManager.getTaskByNumber(5);
+        taskManager.getTaskByNumber(6);
+        taskManager.getTaskByNumber(2);
+        taskManager.getHistory();
+        taskManager.getTaskByNumber(5);
+        taskManager.getHistory();
+        taskManager.getTaskByNumber(4);
+        taskManager.getHistory();
+        taskManager.clearTaskByNumber(1);
+        taskManager.getHistory();
+        taskManager.clearTaskByNumber(3);
+        taskManager.getHistory();
     }
 }
