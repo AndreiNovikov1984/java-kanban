@@ -194,7 +194,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    private StatusTask checkEpicStatus(ArrayList<StatusTask> subTaskStatus) {    // метод обновления статуса эпика
+    protected StatusTask checkEpicStatus(ArrayList<StatusTask> subTaskStatus) {    // метод обновления статуса эпика
         StatusTask EpicStatus;
         int countNew = 0;
         int countDone = 0;
