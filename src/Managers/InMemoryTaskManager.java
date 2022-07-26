@@ -18,24 +18,27 @@ public class InMemoryTaskManager implements TaskManager {
     private static Integer identificator = 0;
 
     @Override
-    public void getlistTask() { // метод вывода списка задач
-        for (int taskNumber : listTask.keySet()) {
+    public Map<Integer, Task> getlistTask() { // метод вывода списка задач
+        return listTask;
+      /*  for (int taskNumber : listTask.keySet()) {
             System.out.println("ID " + taskNumber + ", задача - " + listTask.get(taskNumber).getTaskName());
-        }
+        }*/
     }
 
     @Override
-    public void getlistEpicTask() { // метод вывода списка эпиков
-        for (int epicTaskNumber : listEpicTask.keySet()) {
+    public Map<Integer, EpicTask> getlistEpicTask() { // метод вывода списка эпиков
+        return listEpicTask;
+      /*  for (int epicTaskNumber : listEpicTask.keySet()) {
             System.out.println("ID " + epicTaskNumber + ", эпик - " + listEpicTask.get(epicTaskNumber).getTaskName());
-        }
+        }*/
     }
 
     @Override
-    public void getlistSubTask() { // метод вывода списка подзадач
-        for (int subTaskNumber : listSubTask.keySet()) {
+    public Map<Integer, SubTask> getlistSubTask() { // метод вывода списка подзадач
+        return listSubTask;
+    /*    for (int subTaskNumber : listSubTask.keySet()) {
             System.out.println("ID " + subTaskNumber + ", подзадача - " + listSubTask.get(subTaskNumber).getTaskName());
-        }
+        }*/
     }
 
     @Override
@@ -222,8 +225,16 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             System.out.println("Были просмотрены следующие задачи:");
             for (Task taskHistory : historyManager.getHistory()) {
-                System.out.println("ID задачи " + taskHistory.getTaskId() + ", название задачи " + taskHistory.getTaskName());
+                System.out.println("ID задачи " + taskHistory.getTaskId() + ", название задачи "
+                        + taskHistory.getTaskName());
             }
         }
+    }
+
+    public InMemoryHistoryManager getHistoryManager() {
+        return historyManager;
+    }
+
+    public void save() {
     }
 }

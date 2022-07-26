@@ -2,6 +2,7 @@ package Tasks;
 
 public class Task {
     protected int taskId;
+    protected final TypeTask taskType = TypeTask.TASK;
     protected final String taskName;
     protected final String taskDescription;
     protected StatusTask taskStatus = StatusTask.NEW;
@@ -11,6 +12,12 @@ public class Task {
         this.taskName = taskName;
         this.taskDescription = taskDescription;
     }
+    public Task(int taskId, String taskName, StatusTask taskStatus, String taskDescription) {
+        this.taskId = taskId;
+        this.taskName = taskName;
+        this.taskStatus = taskStatus;
+        this.taskDescription = taskDescription;
+    }
 
     public int getTaskId() {
         return taskId;
@@ -18,6 +25,14 @@ public class Task {
 
     public void setTaskId(int taskId) {
         this.taskId = taskId;
+    }
+
+    public String getTaskDescription() {
+        return taskDescription;
+    }
+
+    public TypeTask getTaskType() {
+        return taskType;
     }
 
     public String getTaskName() {
@@ -34,7 +49,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Tasks.Task{" +
+        return taskType + "{" +
                 "taskId='" + taskId + '\'' +
                 ", taskName='" + taskName + '\'' +
                 ", taskDescription='" + taskDescription.length() + '\'' +

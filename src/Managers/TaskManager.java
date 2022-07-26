@@ -4,13 +4,15 @@ import Tasks.Task;
 import Tasks.EpicTask;
 import Tasks.SubTask;
 
+import java.util.Map;
+
 public interface TaskManager {
 
-    void getlistTask();  // метод вывода списка задач?
+    Map<Integer, Task> getlistTask();  // метод вывода списка задач?
 
-    void getlistEpicTask();  // метод вывода списка эпиков
+    Map<Integer, EpicTask> getlistEpicTask();  // метод вывода списка эпиков
 
-    void getlistSubTask();  // метод вывода списка подзадач
+    Map<Integer, SubTask> getlistSubTask();  // метод вывода списка подзадач
 
     void clearTaskList();   // метод удаления всего списка задач
 
