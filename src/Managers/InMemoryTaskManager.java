@@ -11,34 +11,25 @@ import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private Map<Integer, Task> listTask = new HashMap<>();
-    private Map<Integer, EpicTask> listEpicTask = new HashMap<>();
-    private Map<Integer, SubTask> listSubTask = new HashMap<>();
+    private static Map<Integer, Task> listTask = new HashMap<>();
+    private static Map<Integer, EpicTask> listEpicTask = new HashMap<>();
+    private static Map<Integer, SubTask> listSubTask = new HashMap<>();
     private InMemoryHistoryManager historyManager = Managers.getDefaultHistory();
-    private static Integer identificator = 0;
+    protected static Integer identificator = 0;
 
     @Override
     public Map<Integer, Task> getlistTask() { // метод вывода списка задач
         return listTask;
-      /*  for (int taskNumber : listTask.keySet()) {
-            System.out.println("ID " + taskNumber + ", задача - " + listTask.get(taskNumber).getTaskName());
-        }*/
     }
 
     @Override
     public Map<Integer, EpicTask> getlistEpicTask() { // метод вывода списка эпиков
         return listEpicTask;
-      /*  for (int epicTaskNumber : listEpicTask.keySet()) {
-            System.out.println("ID " + epicTaskNumber + ", эпик - " + listEpicTask.get(epicTaskNumber).getTaskName());
-        }*/
     }
 
     @Override
     public Map<Integer, SubTask> getlistSubTask() { // метод вывода списка подзадач
         return listSubTask;
-    /*    for (int subTaskNumber : listSubTask.keySet()) {
-            System.out.println("ID " + subTaskNumber + ", подзадача - " + listSubTask.get(subTaskNumber).getTaskName());
-        }*/
     }
 
     @Override
@@ -97,21 +88,18 @@ public class InMemoryTaskManager implements TaskManager {
     public void createTask(Task task) {      // метод создания задачи
         task.setTaskId(++identificator);
         listTask.put(task.getTaskId(), task);
-        System.out.println(listTask.get(task.getTaskId()));
     }
 
     @Override
     public void createTask(EpicTask epicTask) {  // метод создания эпика
         epicTask.setTaskId(++identificator);
         listEpicTask.put(epicTask.getTaskId(), epicTask);
-        System.out.println(listEpicTask.get(epicTask.getTaskId()));
     }
 
     @Override
     public void createTask(SubTask subTask) {        // метод создания подзадачи
         subTask.setTaskId(++identificator);
         listSubTask.put(subTask.getTaskId(), subTask);
-        System.out.println(listSubTask.get(subTask.getTaskId()));
         refreshTask(listEpicTask.get(subTask.getEpikTaskIdentificator()));
     }
 

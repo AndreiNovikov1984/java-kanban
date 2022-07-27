@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -17,6 +18,32 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
 
     public FileBackedTasksManager(Path backUpFilePath) {
         this.backUpFilePath = backUpFilePath;
+    }
+
+    public static void main(String[] args) {
+        FileBackedTasksManager taskManager = new FileBackedTasksManager(Paths.get("backup.csv"));
+        taskManager.createTask(new Task(0, "Переезд", "Собрать вещи перевезти разобрать"));
+        taskManager.createTask(new EpicTask(0, "Обучение Java",
+                "выбрать курс пройти курс усвоить весь материал"));
+        taskManager.createTask(new EpicTask(0, "Выучить уроки", "усвоить весь материал"));
+        taskManager.createTask(new SubTask(0, "Выбрать курс",
+                "изучить всех поставщиков курсов", 3));
+        taskManager.createTask(new SubTask(0, "Пройти курс", "выполнить все задания",
+                3));
+        taskManager.createTask(new SubTask(0, "Найти учебник",
+                "открыть учебник/закрыть учебник", 3));
+        taskManager.createTask(new Task(0, "Покупка стола", "Выбрать стол купить привезти"));
+        taskManager.getTaskByNumber(1);
+        taskManager.getTaskByNumber(2);
+        taskManager.getTaskByNumber(7);
+        taskManager.getTaskByNumber(6);
+        taskManager.getTaskByNumber(2);
+        FileBackedTasksManager taskManager1 = new FileBackedTasksManager(Paths.get("backup.csv"));
+        loadFromFile(taskManager1.backUpFilePath);
+        System.out.println(taskManager1.getlistTask());
+        System.out.println(taskManager1.getlistEpicTask());
+        System.out.println(taskManager1.getlistSubTask());
+        taskManager1.getHistory();
     }
 
     @Override
@@ -133,7 +160,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         for (SubTask subTask : getlistSubTask().values()) {
             saveString.append(convert.toString(subTask));
         }
-        saveString.append("History," + Convert.toString(super.getHistoryManager()));
+        saveString.append("\n" + Convert.toString(super.getHistoryManager()));
         try (Writer fileWriter = new FileWriter(backUpFilePath.toString(), false)) {
             fileWriter.write(saveString.toString());
         } catch (IOException exception) {
@@ -141,7 +168,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         }
     }
 
-    public static void loadFromFile(Path backUpFilePath) {
+    public static void loadFromFile(Path backUpFilePath) {      // метод загрузки данных из файла
         FileBackedTasksManager taskManager = new FileBackedTasksManager(backUpFilePath);
         try {
             String value = Files.readString(backUpFilePath);
@@ -151,42 +178,38 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         }
     }
 
-     public void recovery(String value) {  // метод восстановления информации из файла
+    public void recovery(String value) {                // метод восстановления информации из файла
         String[] lines = value.split("\n");
+        Integer maxID = 0;
         for (int i = 1; i < lines.length; i++) {
             String[] line = lines[i].split(",");
-            if (line[0].equals("History")) {
-                for (int j = 1; j < line.length; j++) {
-                    getTask(Integer.parseInt(line[j].trim()));
+            if (line[0].equals("")) {
+                line = lines[i + 1].split(",");
+                for (int j = 0; j < line.length; j++) {
+                    Convert.fromString(Integer.parseInt(line[j].trim()));
                 }
+                break;
             } else if (TypeTask.valueOf(line[1].trim()) == TypeTask.TASK) {
-                super.createTask(new Task(Integer.parseInt(line[0].trim()), line[2].trim(),
-                        StatusTask.valueOf(line[3].trim()), line[4].trim()));
+                Task task = convert.fromStringTask(line);
+                ;
+                super.getlistTask().put(task.getTaskId(), task);
+                if (maxID < task.getTaskId()) {
+                    maxID = task.getTaskId();
+                }
             } else if (TypeTask.valueOf(line[1].trim()) == TypeTask.EPICTASK) {
-                super.createTask(new EpicTask(Integer.parseInt(line[0].trim()), line[2].trim(),
-                        StatusTask.valueOf(line[3].trim()), line[4].trim()));
+                EpicTask epic = convert.fromStringEpic(line);
+                super.getlistEpicTask().put(epic.getTaskId(), epic);
+                if (maxID < epic.getTaskId()) {
+                    maxID = epic.getTaskId();
+                }
             } else if (TypeTask.valueOf(line[1].trim()).equals(TypeTask.SUBTASK)) {
-                super.createTask(new SubTask(Integer.parseInt(line[0].trim()), line[2].trim(),
-                        StatusTask.valueOf(line[3].trim()), line[4].trim(), Integer.parseInt(line[5].trim())));
+                SubTask subTask = convert.fromStringSub(line);
+                super.getlistSubTask().put(subTask.getTaskId(), subTask);
+                if (maxID < subTask.getTaskId()) {
+                    maxID = subTask.getTaskId();
+                }
             }
         }
-    }
-
-    public void getTask(int number) {            // метод восстановления задач в истории
-        for (Task task : getlistTask().values()) {
-            if (task.getTaskId() == number) {
-                super.getHistoryManager().add(task);
-            }
-        }
-        for (EpicTask epicTask : getlistEpicTask().values()) {
-            if (epicTask.getTaskId() == number) {
-                super.getHistoryManager().add(epicTask);
-            }
-        }
-        for (SubTask subTask : getlistSubTask().values()) {
-            if (subTask.getTaskId() == number) {
-                super.getHistoryManager().add(subTask);
-            }
-        }
+        super.identificator = maxID;
     }
 }

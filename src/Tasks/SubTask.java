@@ -9,6 +9,7 @@ public class SubTask extends Task {
         super(taskId, taskName, taskDescription);
         this.epikTaskIdentificator = epikTaskIdentificator;
     }
+
     public SubTask(int taskId, String taskName, StatusTask taskStatus, String taskDescription, Integer epikTaskIdentificator) {
         super(taskId, taskName, taskStatus, taskDescription);
         this.epikTaskIdentificator = epikTaskIdentificator;
