@@ -13,8 +13,7 @@ import java.util.Map;
 
 public class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager {
 
-    Convert convert = new Convert();
-    Path backUpFilePath;
+    private final Path backUpFilePath;
 
     public FileBackedTasksManager(Path backUpFilePath) {
         this.backUpFilePath = backUpFilePath;
@@ -138,12 +137,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
     }
 
     @Override
-    public void getHistory() { // метод получения истории просмотров
+    public void getHistory() {           // метод получения истории просмотров
         super.getHistory();
         save();
     }
 
-    @Override
     public void save() {
         try {
             Path backUpFile = Files.createFile(backUpFilePath);
@@ -152,13 +150,13 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         StringBuilder saveString = new StringBuilder("id,type,name,status,description,epic\n");
 
         for (Task task : getlistTask().values()) {
-            saveString.append(convert.toString(task));
+            saveString.append(Convert.toString(task));
         }
         for (EpicTask epicTask : getlistEpicTask().values()) {
-            saveString.append(convert.toString(epicTask));
+            saveString.append(Convert.toString(epicTask));
         }
         for (SubTask subTask : getlistSubTask().values()) {
-            saveString.append(convert.toString(subTask));
+            saveString.append(Convert.toString(subTask));
         }
         saveString.append("\n" + Convert.toString(super.getHistoryManager()));
         try (Writer fileWriter = new FileWriter(backUpFilePath.toString(), false)) {
@@ -168,7 +166,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         }
     }
 
-    public static void loadFromFile(Path backUpFilePath) {      // метод загрузки данных из файла
+    public static FileBackedTasksManager loadFromFile(Path backUpFilePath) {      // метод загрузки данных из файла
         FileBackedTasksManager taskManager = new FileBackedTasksManager(backUpFilePath);
         try {
             String value = Files.readString(backUpFilePath);
@@ -176,6 +174,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
         } catch (IOException exception) {
             System.out.println("Файл не читабелен, невозможно восстановить данные");
         }
+        return taskManager;
     }
 
     public void recovery(String value) {                // метод восстановления информации из файла
@@ -186,24 +185,24 @@ public class FileBackedTasksManager extends InMemoryTaskManager implements TaskM
             if (line[0].equals("")) {
                 line = lines[i + 1].split(",");
                 for (int j = 0; j < line.length; j++) {
-                    Convert.fromString(Integer.parseInt(line[j].trim()));
+                    Convert.fromString(Integer.parseInt(line[j].trim()), super.getHistoryManager());
                 }
                 break;
             } else if (TypeTask.valueOf(line[1].trim()) == TypeTask.TASK) {
-                Task task = convert.fromStringTask(line);
+                Task task = Convert.fromStringTask(line);
                 ;
                 super.getlistTask().put(task.getTaskId(), task);
                 if (maxID < task.getTaskId()) {
                     maxID = task.getTaskId();
                 }
             } else if (TypeTask.valueOf(line[1].trim()) == TypeTask.EPICTASK) {
-                EpicTask epic = convert.fromStringEpic(line);
+                EpicTask epic = Convert.fromStringEpic(line);
                 super.getlistEpicTask().put(epic.getTaskId(), epic);
                 if (maxID < epic.getTaskId()) {
                     maxID = epic.getTaskId();
                 }
             } else if (TypeTask.valueOf(line[1].trim()).equals(TypeTask.SUBTASK)) {
-                SubTask subTask = convert.fromStringSub(line);
+                SubTask subTask = Convert.fromStringSub(line);
                 super.getlistSubTask().put(subTask.getTaskId(), subTask);
                 if (maxID < subTask.getTaskId()) {
                     maxID = subTask.getTaskId();

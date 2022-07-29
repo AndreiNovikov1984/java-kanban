@@ -222,7 +222,4 @@ public class InMemoryTaskManager implements TaskManager {
     public InMemoryHistoryManager getHistoryManager() {
         return historyManager;
     }
-
-    public void save() {
-    }
 }
