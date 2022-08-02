@@ -142,10 +142,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     public void save() {
-    /*    try {
-            Path backUpFile = Files.createFile(backUpFilePath);
-        } catch (IOException exception) {
-        }*/
         StringBuilder saveString = new StringBuilder("id,type,name,status,description,epic\n");
 
         for (Task task : getlistTask().values()) {
