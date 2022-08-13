@@ -5,25 +5,39 @@ import Tasks.StatusTask;
 import Tasks.SubTask;
 import Tasks.Task;
 
+import java.time.format.DateTimeFormatter;
+
 public class Convert {
 
     protected static String toString(Task task) {                // метод перевода данных для файла TASK и EPICTASK
-        return Integer.toString(task.getTaskId()) +
-                "," + task.getTaskType() +
-                "," + task.getTaskName() +
-                "," + task.getTaskStatus() +
-                "," + task.getTaskDescription() + "\n";
+        if (task.getTaskDuration() == null) {
+            return Integer.toString(task.getTaskId()) +
+                    "," + task.getTaskType() +
+                    "," + task.getTaskName() +
+                    "," + task.getTaskStatus() +
+                    "," + task.getTaskDescription() +
+                    "," + task.getTaskStartTime() +
+                    "," + task.getTaskDuration() + "\n";
+        } else {
+            return Integer.toString(task.getTaskId()) +
+                    "," + task.getTaskType() +
+                    "," + task.getTaskName() +
+                    "," + task.getTaskStatus() +
+                    "," + task.getTaskDescription() +
+                    "," + task.getTaskStartTime() +
+                    "," + task.getTaskDuration().toMinutes() + "\n";
+        }
     }
 
-    protected static Task fromStringTask(String[] line) {                      // метод восстновления TASK из файла
+    protected static Task fromStringTask(String[] line) {                      // метод восстановления TASK из файла
         Task task = new Task(Integer.parseInt(line[0].trim()), line[2].trim(),
-                StatusTask.valueOf(line[3].trim()), line[4].trim());
+                StatusTask.valueOf(line[3].trim()), line[4].trim(), line[5].trim(), line[6].trim());
         return task;
     }
 
-    protected static EpicTask fromStringEpic(String[] line) {            // метод восстновления EPICTASK из файла
-        EpicTask epic = new EpicTask(Integer.parseInt(line[0].trim()), line[2].trim(),
-                StatusTask.valueOf(line[3].trim()), line[4].trim());
+    protected static EpicTask fromStringEpic(String[] line) {            // метод восстановления EPICTASK из файла
+        EpicTask epic= new EpicTask(Integer.parseInt(line[0].trim()), line[2].trim(),
+                    StatusTask.valueOf(line[3].trim()), line[4].trim(), line[5].trim(), line[6].trim());
         return epic;
     }
 
@@ -33,13 +47,15 @@ public class Convert {
                 "," + subTask.getTaskName() +
                 "," + subTask.getTaskStatus() +
                 "," + subTask.getTaskDescription() +
+                "," + subTask.getTaskStartTime() +
+                "," + subTask.getTaskDuration().toMinutes() +
                 "," + subTask.getEpikTaskIdentificator() + "\n";
     }
 
-    protected static SubTask fromStringSub(String[] line) {               // метод восстновления SUBTASK из файла
+    protected static SubTask fromStringSub(String[] line) {               // метод восстановления SUBTASK из файла
         InMemoryTaskManager taskManager = new InMemoryTaskManager();
         SubTask subTask = new SubTask(Integer.parseInt(line[0].trim()), line[2].trim(),
-                StatusTask.valueOf(line[3].trim()), line[4].trim(), Integer.parseInt(line[5].trim()));
+                StatusTask.valueOf(line[3].trim()), line[4].trim(), line[5].trim(), line[6].trim(), Integer.parseInt(line[7].trim()));
         taskManager.refreshTask(subTask);
         return subTask;
     }

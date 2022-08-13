@@ -7,6 +7,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
+import java.time.Duration;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -17,26 +19,31 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public FileBackedTasksManager(File backUpFile) {
     this.backUpFile = backUpFile;
     }
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
 
     public static void main(String[] args) {
         File backUpFile = new File("backup.csv");
         FileBackedTasksManager taskManager = new FileBackedTasksManager(backUpFile);
-        taskManager.createTask(new Task(0, "Переезд", "Собрать вещи перевезти разобрать"));
+        taskManager.createTask(new Task(0, "Переезд", "Собрать вещи перевезти разобрать",
+                "13.08.2022, 10:00", 20));
         taskManager.createTask(new EpicTask(0, "Обучение Java",
                 "выбрать курс пройти курс усвоить весь материал"));
         taskManager.createTask(new EpicTask(0, "Выучить уроки", "усвоить весь материал"));
         taskManager.createTask(new SubTask(0, "Выбрать курс",
-                "изучить всех поставщиков курсов", 3));
+                "изучить всех поставщиков курсов","11.08.2022, 14:00", 30, 3));
         taskManager.createTask(new SubTask(0, "Пройти курс", "выполнить все задания",
-                3));
-        taskManager.createTask(new SubTask(0, "Найти учебник",
-                "открыть учебник/закрыть учебник", 3));
-        taskManager.createTask(new Task(0, "Покупка стола", "Выбрать стол купить привезти"));
+                "10.08.2022, 15:00", 50, 3));
+        taskManager.createTask(new SubTask(0, "Найти учебник", "открыть учебник/закрыть учебник",
+                "14.08.2022, 12:00", 15, 3));
+        taskManager.createTask(new Task(0, "Покупка стола", "Выбрать стол купить привезти",
+                "12.08.2022, 15:00", 120));
         taskManager.getTaskByNumber(1);
         taskManager.getTaskByNumber(2);
-        taskManager.getTaskByNumber(7);
+        taskManager.getTaskByNumber(3);
+        taskManager.getTaskByNumber(4);
+        taskManager.getTaskByNumber(5);
         taskManager.getTaskByNumber(6);
-        taskManager.getTaskByNumber(2);
+
         FileBackedTasksManager taskManager1 = loadFromFile(backUpFile);
         System.out.println(taskManager1.getlistTask());
         System.out.println(taskManager1.getlistEpicTask());
@@ -142,7 +149,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     public void save() {
-        StringBuilder saveString = new StringBuilder("id,type,name,status,description,epic\n");
+        StringBuilder saveString = new StringBuilder("id,type,name,status,description,taskStartTime, taskDuration, epic\n");
 
         for (Task task : getlistTask().values()) {
             saveString.append(Convert.toString(task));

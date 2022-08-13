@@ -5,13 +5,13 @@ public class SubTask extends Task {
     protected final TypeTask taskType = TypeTask.SUBTASK;
     private Integer epikTaskIdentificator;
 
-    public SubTask(int taskId, String taskName, String taskDescription, Integer epikTaskIdentificator) {
-        super(taskId, taskName, taskDescription);
+    public SubTask(int taskId, String taskName, String taskDescription, String time, long durationTask, Integer epikTaskIdentificator) {
+        super(taskId, taskName, taskDescription, time, durationTask);
         this.epikTaskIdentificator = epikTaskIdentificator;
     }
 
-    public SubTask(int taskId, String taskName, StatusTask taskStatus, String taskDescription, Integer epikTaskIdentificator) {
-        super(taskId, taskName, taskStatus, taskDescription);
+    public SubTask(int taskId, String taskName, StatusTask taskStatus, String taskDescription, String time, String durationTask, Integer epikTaskIdentificator) {
+        super(taskId, taskName, taskStatus, taskDescription, time, durationTask);
         this.epikTaskIdentificator = epikTaskIdentificator;
     }
 
@@ -31,6 +31,8 @@ public class SubTask extends Task {
                 ", taskName='" + taskName + '\'' +
                 ", taskDescription='" + taskDescription + '\'' +
                 ", taskStatus='" + taskStatus + '\'' +
+                ", taskDuration='" + taskDuration.toMinutes() + '\'' +
+                ", taskStartTime='" + taskStartTime.format(formatter) + '\'' +
                 ", epikTaskIdentificator=" + epikTaskIdentificator +
                 '}';
     }

@@ -5,6 +5,8 @@ import Tasks.EpicTask;
 import Tasks.SubTask;
 import Tasks.StatusTask;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -125,7 +127,7 @@ public class InMemoryTaskManager implements TaskManager {
             listEpicTask.get(epicTask.getTaskId()).setTaskStatus(checkEpicStatus(subTaskStatusTemporary));
         }
         listEpicTask.get(epicTask.getTaskId()).setSubTaskIdentificator(subTaskNumberTemporary);
-        listEpicTask.put(epicTask.getTaskId(), epicTask);
+        listEpicTask.put(epicTask.getTaskId(), checkEpicTime(epicTask));
         System.out.println("Эпик обновлен");
     }
 
@@ -204,6 +206,23 @@ public class InMemoryTaskManager implements TaskManager {
             EpicStatus = StatusTask.IN_PROGRESS;
         }
         return EpicStatus;
+    }
+
+    protected EpicTask checkEpicTime(EpicTask epicTask) {
+        LocalDateTime epicStartTime = LocalDateTime.of(2500,1,1,0,0);
+        LocalDateTime epicEndTime = LocalDateTime.of(1900,1,1,0,0);;
+        for (int subNum : epicTask.getSubTaskIdentificator()) {
+            if (epicStartTime.isAfter(listSubTask.get(subNum).getTaskStartTime())) {
+                epicStartTime = listSubTask.get(subNum).getTaskStartTime();
+            }
+            if (epicEndTime.isBefore(listSubTask.get(subNum).getTaskEndTime())) {
+                epicEndTime = listSubTask.get(subNum).getTaskEndTime();
+            }
+        }
+        epicTask.setEpicTaskStartTime(epicStartTime);
+        epicTask.setEpicTaskDuration(Duration.between(epicStartTime, epicEndTime));
+        epicTask.getTaskEndTime();
+        return epicTask;
     }
 
     @Override
