@@ -1,9 +1,11 @@
 package Managers;
 
+import Tasks.StatusTask;
 import Tasks.Task;
 import Tasks.EpicTask;
 import Tasks.SubTask;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public interface TaskManager {
@@ -38,5 +40,5 @@ public interface TaskManager {
 
     void getSubTaskByEpicNumber(int taskIdentificator);   // метод получения подзадач определенного эпика
 
-    void getHistory(); // метод получения истории просмотров
+        void getHistory(); // метод получения истории просмотров
 }

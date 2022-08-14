@@ -3,8 +3,9 @@ package Tasks;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 
-public class Task implements  Comparable<Task> {
+public class Task {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
     protected int taskId;
     protected final TypeTask taskType = TypeTask.TASK;
@@ -36,7 +37,7 @@ public class Task implements  Comparable<Task> {
         this.taskName = taskName;
         this.taskStatus = taskStatus;
         this.taskDescription = taskDescription;
-        this.taskStartTime = (time.equals("null") ? null: LocalDateTime.parse(time));
+        this.taskStartTime = (time.equals("null") ? null : LocalDateTime.parse(time));
         this.taskDuration = (durationTask.equals("null") ? null : Duration.ofMinutes(Long.parseLong(durationTask)));
     }
 
@@ -90,11 +91,5 @@ public class Task implements  Comparable<Task> {
                 ", taskDuration='" + taskDuration.toMinutes() + '\'' +
                 ", taskStartTime='" + taskStartTime.format(formatter) + '\'' +
                 '}';
-    }
-
-    @Override
-    public int compareTo(Task task) {
-        if (this.taskStartTime.isBefore(task.taskStartTime)) {return 5;
-        } else { return -5;}
     }
 }

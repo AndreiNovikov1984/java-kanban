@@ -10,10 +10,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private static Map<Integer, Task> listTask = new HashMap<>();
+    private Map<Integer, Task> listTask = new HashMap<>();
     private static Map<Integer, EpicTask> listEpicTask = new HashMap<>();
     private static Map<Integer, SubTask> listSubTask = new HashMap<>();
     private InMemoryHistoryManager historyManager = Managers.getDefaultHistory();
@@ -209,8 +210,9 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     protected EpicTask checkEpicTime(EpicTask epicTask) {
-        LocalDateTime epicStartTime = LocalDateTime.of(2500,1,1,0,0);
-        LocalDateTime epicEndTime = LocalDateTime.of(1900,1,1,0,0);;
+        LocalDateTime epicStartTime = LocalDateTime.of(2500, 1, 1, 0, 0);
+        LocalDateTime epicEndTime = LocalDateTime.of(1900, 1, 1, 0, 0);
+        ;
         for (int subNum : epicTask.getSubTaskIdentificator()) {
             if (epicStartTime.isAfter(listSubTask.get(subNum).getTaskStartTime())) {
                 epicStartTime = listSubTask.get(subNum).getTaskStartTime();
