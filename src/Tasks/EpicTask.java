@@ -20,16 +20,16 @@ public class EpicTask extends Task {
 
     @Override
     public String toString() {
-            return taskType + "{" +
-                    "taskId='" + taskId + '\'' +
-                    ", taskName='" + taskName + '\'' +
-                    ", taskDescription='" + taskDescription + '\'' +
-                    ", taskStatus='" + taskStatus + '\'' +
-                    ", taskDuration='" + (taskDuration == null ? null : taskDuration.toMinutes()) + '\'' +
-                    ", taskStartTime='" + (taskStartTime == null ? null : taskStartTime.format(formatter)) + '\'' +
-                    ", subTaskIdentificator=" + subTaskIdentificator +
-                    '}';
-        }
+        return taskType + "{" +
+                "taskId='" + taskId + '\'' +
+                ", taskName='" + taskName + '\'' +
+                ", taskDescription='" + taskDescription + '\'' +
+                ", taskStatus='" + taskStatus + '\'' +
+                ", taskDuration='" + (taskDuration == null ? null : taskDuration.toMinutes()) + '\'' +
+                ", taskStartTime='" + (taskStartTime == null ? null : taskStartTime.format(formatter)) + '\'' +
+                ", subTaskIdentificator=" + subTaskIdentificator +
+                '}';
+    }
 
     public ArrayList<Integer> getSubTaskIdentificator() {
         return subTaskIdentificator;

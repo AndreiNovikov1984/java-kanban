@@ -10,15 +10,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Stream;
 
 public class InMemoryTaskManager implements TaskManager {
 
     private Map<Integer, Task> listTask = new HashMap<>();
-    private static Map<Integer, EpicTask> listEpicTask = new HashMap<>();
-    private static Map<Integer, SubTask> listSubTask = new HashMap<>();
+    private Map<Integer, EpicTask> listEpicTask = new HashMap<>();
+    private Map<Integer, SubTask> listSubTask = new HashMap<>();
     private InMemoryHistoryManager historyManager = Managers.getDefaultHistory();
-    protected static Integer identificator = 0;
+    protected Integer identificator = 0;
 
     @Override
     public Map<Integer, Task> getlistTask() { // метод вывода списка задач
@@ -66,25 +65,30 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void getTaskByNumber(int taskIdentificator) { // метод получения данных о задаче по идентификатору
+    public Task getTaskByNumber(int taskIdentificator) { // метод получения данных о задаче по идентификатору
+        Task taskByNum = null;
         for (int taskNumber : listTask.keySet()) {
             if (taskNumber == taskIdentificator) {
                 System.out.println(listTask.get(taskNumber));
                 historyManager.add(listTask.get(taskNumber));
+                taskByNum = listTask.get(taskNumber);
             }
         }
         for (int epicTaskNumber : listEpicTask.keySet()) {
             if (epicTaskNumber == taskIdentificator) {
                 System.out.println(listEpicTask.get(epicTaskNumber));
                 historyManager.add(listEpicTask.get(epicTaskNumber));
+                taskByNum = listEpicTask.get(epicTaskNumber);
             }
         }
         for (int subTaskNumber : listSubTask.keySet()) {
             if (subTaskNumber == taskIdentificator) {
                 System.out.println(listSubTask.get(subTaskNumber));
                 historyManager.add(listSubTask.get(subTaskNumber));
+                taskByNum = listSubTask.get(subTaskNumber);
             }
         }
+        return (taskByNum == null ? null : taskByNum);
     }
 
     @Override
@@ -103,7 +107,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void createTask(SubTask subTask) {        // метод создания подзадачи
         subTask.setTaskId(++identificator);
         listSubTask.put(subTask.getTaskId(), subTask);
-        refreshTask(listEpicTask.get(subTask.getEpikTaskIdentificator()));
+        refreshTask(listEpicTask.get(subTask.getEpicTaskIdentificator()));
     }
 
     @Override
@@ -117,7 +121,7 @@ public class InMemoryTaskManager implements TaskManager {
         ArrayList<Integer> subTaskNumberTemporary = new ArrayList<>();
         ArrayList<StatusTask> subTaskStatusTemporary = new ArrayList<>();
         for (int subTaskNumber : listSubTask.keySet()) {
-            if (listSubTask.get(subTaskNumber).getEpikTaskIdentificator() == epicTask.getTaskId()) {
+            if (listSubTask.get(subTaskNumber).getEpicTaskIdentificator() == epicTask.getTaskId()) {
                 subTaskNumberTemporary.add(subTaskNumber);
                 subTaskStatusTemporary.add(listSubTask.get(subTaskNumber).getTaskStatus());
             }
@@ -136,8 +140,8 @@ public class InMemoryTaskManager implements TaskManager {
     public void refreshTask(SubTask subTask) {       // метод обновление подзадачи
         listSubTask.put(subTask.getTaskId(), subTask);
         System.out.println("Подзадача обновлена");
-        refreshTask(listEpicTask.get(listSubTask.get(subTask.getTaskId()).getEpikTaskIdentificator()));
-    }
+            refreshTask(listEpicTask.get(subTask.getEpicTaskIdentificator()));
+        }
 
     @Override
     public void clearTaskByNumber(int taskIdentificator) {  // метод удаление задачи по идентификатору
@@ -166,7 +170,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         for (int subTaskNumber : listSubTask.keySet()) {
             if (subTaskNumber == taskIdentificator) {
-                int epikTaskIdentificatorTemporary = listSubTask.get(subTaskNumber).getEpikTaskIdentificator();
+                int epikTaskIdentificatorTemporary = listSubTask.get(subTaskNumber).getEpicTaskIdentificator();
                 listSubTask.remove(subTaskNumber);
                 historyManager.remove(subTaskNumber);
                 System.out.println("Подзадача ID - " + subTaskNumber + " удалена");

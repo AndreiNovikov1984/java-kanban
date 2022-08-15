@@ -5,9 +5,6 @@ import Tasks.StatusTask;
 import Tasks.SubTask;
 import Tasks.Task;
 
-import java.time.Duration;
-import java.time.format.DateTimeFormatter;
-
 public class Convert<T extends Task> {
 
     protected static String toString(Task task) {                // метод перевода данных для файла TASK и EPICTASK
@@ -41,7 +38,7 @@ public class Convert<T extends Task> {
                 "," + subTask.getTaskDescription() +
                 "," + subTask.getTaskStartTime() +
                 "," + subTask.getTaskDuration().toMinutes() +
-                "," + subTask.getEpikTaskIdentificator() + "\n";
+                "," + subTask.getEpicTaskIdentificator() + "\n";
     }
 
     protected static SubTask fromStringSub(String[] line) {               // метод восстановления SUBTASK из файла
@@ -49,7 +46,6 @@ public class Convert<T extends Task> {
         SubTask subTask = new SubTask(Integer.parseInt(line[0].trim()), line[2].trim(),
                 StatusTask.valueOf(line[3].trim()), line[4].trim(), line[5].trim(), line[6].trim(),
                 Integer.parseInt(line[7].trim()));
-        taskManager.refreshTask(subTask);
         return subTask;
     }
 

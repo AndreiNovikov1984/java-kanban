@@ -7,12 +7,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
-import java.time.Duration;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
@@ -48,12 +46,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         taskManager.getTaskByNumber(5);
         taskManager.getTaskByNumber(6);
         taskManager.getPrioritizedTasks();
-/*
+
         FileBackedTasksManager taskManager1 = loadFromFile(backUpFile);
         System.out.println(taskManager1.getlistTask());
         System.out.println(taskManager1.getlistEpicTask());
         System.out.println(taskManager1.getlistSubTask());
-        taskManager1.getHistory();*/
+        taskManager1.getHistory();
     }
 
     @Override
@@ -89,11 +87,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         save();
     }
 
-    @Override
-    public void getTaskByNumber(int taskIdentificator) { // метод получения данных о задаче по идентификатору
-        super.getTaskByNumber(taskIdentificator);
-        save();
-    }
+ /*   @Override
+    public Task getTaskByNumber(int taskIdentificator) { // метод получения данных о задаче по идентификатору
+        Task taskByNum = super.getTaskByNumber(taskIdentificator);
+    }*/
 
     @Override
     public void createTask(Task task) {      // метод создания задачи
@@ -212,7 +209,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     break;
                 } else if (TypeTask.valueOf(line[1].trim()) == TypeTask.TASK) {
                     Task task = Convert.fromStringTask(line);
-                    ;
+                    taskManager.refreshTask(task);
                     taskManager.getlistTask().put(task.getTaskId(), task);
                     if (maxID < task.getTaskId()) {
                         maxID = task.getTaskId();
@@ -225,6 +222,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     }
                 } else if (TypeTask.valueOf(line[1].trim()).equals(TypeTask.SUBTASK)) {
                     SubTask subTask = Convert.fromStringSub(line);
+                    taskManager.refreshTask(subTask);
                     taskManager.getlistSubTask().put(subTask.getTaskId(), subTask);
                     if (maxID < subTask.getTaskId()) {
                         maxID = subTask.getTaskId();

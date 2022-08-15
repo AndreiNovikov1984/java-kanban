@@ -22,7 +22,7 @@ public interface TaskManager {
 
     void clearSubTaskList();   // метод удаления всего списка подзадач
 
-    void getTaskByNumber(int taskIdentificator);  // метод получения данных о задаче по идентификатору
+    Task getTaskByNumber(int taskIdentificator);  // метод получения данных о задаче по идентификатору
 
     void createTask(Task task);       // метод создания задачи
 
@@ -40,5 +40,5 @@ public interface TaskManager {
 
     void getSubTaskByEpicNumber(int taskIdentificator);   // метод получения подзадач определенного эпика
 
-        void getHistory(); // метод получения истории просмотров
+    void getHistory(); // метод получения истории просмотров
 }

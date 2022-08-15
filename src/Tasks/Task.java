@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
+import java.util.Objects;
 
 public class Task {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
@@ -79,6 +80,20 @@ public class Task {
 
     public LocalDateTime getTaskEndTime() {
         return taskEndTime = taskStartTime.plus(taskDuration);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Task)) return false;
+        Task task = (Task) o;
+        return taskId == task.taskId &&
+                taskType == task.taskType &&
+                Objects.equals(taskName, task.taskName) &&
+                Objects.equals(taskDescription, task.taskDescription) &&
+                taskStatus == task.taskStatus &&
+                Objects.equals(taskStartTime, task.taskStartTime) &&
+                Objects.equals(taskDuration, task.taskDuration);
     }
 
     @Override

@@ -3,20 +3,20 @@ package Tasks;
 public class SubTask extends Task {
 
     protected final TypeTask taskType = TypeTask.SUBTASK;
-    private Integer epikTaskIdentificator;
+    private Integer epicTaskIdentificator;
 
-    public SubTask(int taskId, String taskName, String taskDescription, String time, long durationTask, Integer epikTaskIdentificator) {
+    public SubTask(int taskId, String taskName, String taskDescription, String time, long durationTask, Integer epicTaskIdentificator) {
         super(taskId, taskName, taskDescription, time, durationTask);
-        this.epikTaskIdentificator = epikTaskIdentificator;
+        this.epicTaskIdentificator = epicTaskIdentificator;
     }
 
-    public SubTask(int taskId, String taskName, StatusTask taskStatus, String taskDescription, String time, String durationTask, Integer epikTaskIdentificator) {
+    public SubTask(int taskId, String taskName, StatusTask taskStatus, String taskDescription, String time, String durationTask, Integer epicTaskIdentificator) {
         super(taskId, taskName, taskStatus, taskDescription, time, durationTask);
-        this.epikTaskIdentificator = epikTaskIdentificator;
+        this.epicTaskIdentificator = epicTaskIdentificator;
     }
 
-    public Integer getEpikTaskIdentificator() {
-        return epikTaskIdentificator;
+    public Integer getEpicTaskIdentificator() {
+        return epicTaskIdentificator;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class SubTask extends Task {
                 ", taskStatus='" + taskStatus + '\'' +
                 ", taskDuration='" + taskDuration.toMinutes() + '\'' +
                 ", taskStartTime='" + taskStartTime.format(formatter) + '\'' +
-                ", epikTaskIdentificator=" + epikTaskIdentificator +
+                ", epikTaskIdentificator=" + epicTaskIdentificator +
                 '}';
     }
 }
