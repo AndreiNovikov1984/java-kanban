@@ -100,6 +100,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void createTask(EpicTask epicTask) {  // метод создания эпика
         epicTask.setTaskId(++identificator);
+        refreshTask(epicTask);
         listEpicTask.put(epicTask.getTaskId(), epicTask);
     }
 
@@ -127,11 +128,11 @@ public class InMemoryTaskManager implements TaskManager {
             }
         }
         if (subTaskStatusTemporary.size() == 0) {
-            listEpicTask.get(epicTask.getTaskId()).setTaskStatus(StatusTask.NEW);
+            epicTask.setTaskStatus(StatusTask.NEW);
         } else {
-            listEpicTask.get(epicTask.getTaskId()).setTaskStatus(checkEpicStatus(subTaskStatusTemporary));
+            epicTask.setTaskStatus(checkEpicStatus(subTaskStatusTemporary));
         }
-        listEpicTask.get(epicTask.getTaskId()).setSubTaskIdentificator(subTaskNumberTemporary);
+        epicTask.setSubTaskIdentificator(subTaskNumberTemporary);
         listEpicTask.put(epicTask.getTaskId(), checkEpicTime(epicTask));
         System.out.println("Эпик обновлен");
     }
@@ -140,8 +141,10 @@ public class InMemoryTaskManager implements TaskManager {
     public void refreshTask(SubTask subTask) {       // метод обновление подзадачи
         listSubTask.put(subTask.getTaskId(), subTask);
         System.out.println("Подзадача обновлена");
+        if (listEpicTask.containsKey(subTask.getEpicTaskIdentificator())) {
             refreshTask(listEpicTask.get(subTask.getEpicTaskIdentificator()));
         }
+    }
 
     @Override
     public void clearTaskByNumber(int taskIdentificator) {  // метод удаление задачи по идентификатору
@@ -181,14 +184,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void getSubTaskByEpicNumber(int taskIdentificator) {  // метод получения подзадач определенного эпика
-        if (listEpicTask.get(taskIdentificator).getSubTaskIdentificator() != null) {
-            ArrayList<Integer> subTaskNumberTemporary = listEpicTask.get(taskIdentificator).getSubTaskIdentificator();
-            for (Integer number : subTaskNumberTemporary) {
-                System.out.println(listSubTask.get(number));
-            }
+    public ArrayList<Integer> getSubTaskByEpicNumber(int taskIdentificator) {  // метод получения подзадач определенного эпика
+        if (listEpicTask.containsKey(taskIdentificator)) {
+            return listEpicTask.get(taskIdentificator).getSubTaskIdentificator() == null ?
+                    null :
+                    listEpicTask.get(taskIdentificator).getSubTaskIdentificator();
         } else {
-            System.out.println("У данного эпика нет подзадач");
+            return null;
         }
     }
 
@@ -225,9 +227,11 @@ public class InMemoryTaskManager implements TaskManager {
                 epicEndTime = listSubTask.get(subNum).getTaskEndTime();
             }
         }
-        epicTask.setEpicTaskStartTime(epicStartTime);
-        epicTask.setEpicTaskDuration(Duration.between(epicStartTime, epicEndTime));
-        epicTask.getTaskEndTime();
+        if (!epicStartTime.isEqual(LocalDateTime.of(2500, 1, 1, 0, 0))) {
+            epicTask.setEpicTaskStartTime(epicStartTime);
+            epicTask.setEpicTaskDuration(Duration.between(epicStartTime, epicEndTime));
+            epicTask.getTaskEndTime();
+        }
         return epicTask;
     }
 

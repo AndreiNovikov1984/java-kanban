@@ -139,8 +139,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void getSubTaskByEpicNumber(int taskIdentificator) {  // метод получения подзадач определенного эпика
-        super.getSubTaskByEpicNumber(taskIdentificator);
+    public ArrayList<Integer> getSubTaskByEpicNumber(int taskIdentificator) {  // метод получения подзадач определенного эпика
+        return super.getSubTaskByEpicNumber(taskIdentificator);
     }
 
     protected StatusTask checkEpicStatus(ArrayList<StatusTask> subTaskStatus) {    // метод обновления статуса эпика

@@ -38,7 +38,7 @@ public interface TaskManager {
 
     void clearTaskByNumber(int taskIdentificator);   // метод удаление задачи по идентификатору
 
-    void getSubTaskByEpicNumber(int taskIdentificator);   // метод получения подзадач определенного эпика
+    ArrayList<Integer> getSubTaskByEpicNumber(int taskIdentificator);   // метод получения подзадач определенного эпика
 
     void getHistory(); // метод получения истории просмотров
 }
