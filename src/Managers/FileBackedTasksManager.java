@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
@@ -87,10 +88,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         save();
     }
 
- /*   @Override
+    @Override
     public Task getTaskByNumber(int taskIdentificator) { // метод получения данных о задаче по идентификатору
-        Task taskByNum = super.getTaskByNumber(taskIdentificator);
-    }*/
+        Task taskByNum;
+        return taskByNum = super.getTaskByNumber(taskIdentificator);
+    }
 
     @Override
     public void createTask(Task task) {      // метод создания задачи
@@ -148,9 +150,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void getHistory() {           // метод получения истории просмотров
-        super.getHistory();
+    public List<Task> getHistory() {           // метод получения истории просмотров
+        List<Task> historyGet = super.getHistory();
         save();
+        return historyGet;
     }
 
     public void save() {
@@ -173,12 +176,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-    public void getPrioritizedTasks() {
-        Sort.getSortedTaskTree();
+    public Set<Task> getPrioritizedTasks() {
         System.out.println("Cписок в сорт виде: " + Sort.getSortedTaskTree());
+        return Sort.getSortedTaskTree();
     }
 
-    protected void validateTaskTime(Task task) {
+    protected List<Integer> validateTaskTime(Task task) {
         List<Integer> collected = Sort.getSortedTaskTree().stream()
                 .filter(t -> t.getTaskId() != task.getTaskId())
                 .filter(t -> ((t.getTaskStartTime().isBefore(task.getTaskStartTime()) && (t.getTaskEndTime().isAfter(task.getTaskStartTime())))) ||
@@ -191,6 +194,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             System.out.println("У задачи ID " + task.getTaskId() + " выявлено пересечение со следующими задачами - ID: "
                     + collected + ". Пожалуйста, внесите изменения.");
         }
+        return collected;
     }
 
     public static FileBackedTasksManager loadFromFile(File backUpFile) {      // метод загрузки данных из файла

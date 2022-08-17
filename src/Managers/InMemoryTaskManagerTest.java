@@ -1,11 +1,9 @@
 package Managers;
 
 import Tasks.EpicTask;
-import Tasks.StatusTask;
 import Tasks.SubTask;
 import Tasks.Task;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 
 class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
@@ -19,26 +17,5 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         taskManager.createTask(new EpicTask(0, "2", "Эпик"));
         taskManager.createTask(new SubTask(0, "3", "Сабтаск", "13.08.2022, 14:00",
                 120, 2));
-        final Task testTask = new Task(1, "1", "Таск", "13.08.2022, 10:00", 20);
-        final EpicTask testEpic = new EpicTask(2, "2", StatusTask.NEW, "Эпик", "2022-08-13T14:00",
-                "120");
-        final SubTask testSub = new SubTask(3, "3", "Сабтаск", "13.08.2022, 14:00",
-                120, 2);
     }
-
-    @Override
-    @Test
-    public void checkEpicStatusWithEmptySubTaskList() {
-    }
-
-    @Override
-    @Test
-    public void checkEpicStatusWithAllNewSubTaskList() {
-    }
-
-    @Override
-    @Test
-    public void checkEpicStatusWithAllDoneSubTaskList() {
-    }
-
 }

@@ -9,6 +9,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -114,7 +115,6 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void refreshTask(Task task) {                    // метод обновление задачи
         listTask.put(task.getTaskId(), task);
-        System.out.println("Задача обновлена");
     }
 
     @Override
@@ -134,13 +134,11 @@ public class InMemoryTaskManager implements TaskManager {
         }
         epicTask.setSubTaskIdentificator(subTaskNumberTemporary);
         listEpicTask.put(epicTask.getTaskId(), checkEpicTime(epicTask));
-        System.out.println("Эпик обновлен");
     }
 
     @Override
     public void refreshTask(SubTask subTask) {       // метод обновление подзадачи
         listSubTask.put(subTask.getTaskId(), subTask);
-        System.out.println("Подзадача обновлена");
         if (listEpicTask.containsKey(subTask.getEpicTaskIdentificator())) {
             refreshTask(listEpicTask.get(subTask.getEpicTaskIdentificator()));
         }
@@ -236,7 +234,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void getHistory() { // метод получения истории просмотров
+    public List<Task> getHistory() { // метод получения истории просмотров
         if (historyManager.getHistory() == null) {
             System.out.println("Не было просмотрено ни одной задачи");
         } else {
@@ -246,6 +244,7 @@ public class InMemoryTaskManager implements TaskManager {
                         + taskHistory.getTaskName());
             }
         }
+        return historyManager.getHistory();
     }
 
     public InMemoryHistoryManager getHistoryManager() {

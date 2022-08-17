@@ -24,7 +24,6 @@ abstract public class TaskManagerTest<T extends TaskManager> {
                 120, 2));
     }
 
-
     @Test
     public void getlistTaskWithNormalTaskList() {
         final Task testTask = new Task(1, "1", "Таск", "13.08.2022, 10:00", 20);
@@ -57,32 +56,32 @@ abstract public class TaskManagerTest<T extends TaskManager> {
     @Test
     public void clearTaskListWithNormalTaskList() {
         taskManager.clearTaskList();
-        assertEquals(taskManager.getlistTask().size(), 0);
+        assertEquals(0, taskManager.getlistTask().size());
     }
 
     @Test
     public void clearEpicTaskListWithNormalEpicTaskList() {
         taskManager.clearEpicTaskList();
-        assertEquals(taskManager.getlistEpicTask().size(), 0);
+        assertEquals(0, taskManager.getlistEpicTask().size());
     }
 
     @Test
     public void clearEpicTaskListWithNormalEpicTaskListWithEmptySubTask() {
         taskManager.getlistSubTask().clear();
         taskManager.clearEpicTaskList();
-        assertEquals(taskManager.getlistEpicTask().size(), 0);
+        assertEquals(0, taskManager.getlistEpicTask().size());
     }
 
     @Test
     public void clearSubTaskListWithNormalSubTaskList() {
         taskManager.clearSubTaskList();
-        assertEquals(taskManager.getlistSubTask().size(), 0);
+        assertEquals(0, taskManager.getlistSubTask().size());
     }
 
     @Test
     public void clearSubTaskListWithClearEpicTaskList() {
         taskManager.clearEpicTaskList();
-        assertEquals(taskManager.getlistSubTask().size(), 0);
+        assertEquals(0, taskManager.getlistSubTask().size());
     }
 
     @Test
@@ -90,14 +89,14 @@ abstract public class TaskManagerTest<T extends TaskManager> {
         final Task testTask = new Task(1, "1", "Таск", "13.08.2022, 10:00", 20);
         final Task savedTask = taskManager.getTaskByNumber(1);
         assertNotNull(savedTask, "Задача не найдена.");
-        assertEquals(testTask, savedTask, "Задачи не совпадают.");
+        assertEquals(savedTask, testTask, "Задачи не совпадают.");
     }
 
     @Test
     public void getTaskByNumberWithoutTaskNumber() {
         final Task testTask = new Task(1, "1", "Таск", "13.08.2022, 10:00", 20);
         final Task savedTask = taskManager.getTaskByNumber(5);
-        assertNull(savedTask, "Задача не найдена.");
+        assertNull(savedTask, "Задача найдена.");
     }
 
     @Test
@@ -106,7 +105,7 @@ abstract public class TaskManagerTest<T extends TaskManager> {
                 "120");
         final Task savedEpic = taskManager.getTaskByNumber(2);
         assertNotNull(savedEpic, "Задача не найдена.");
-        assertEquals(testEpic, savedEpic, "Задачи не совпадают.");
+        assertEquals(savedEpic, testEpic, "Задачи не совпадают.");
     }
 
     @Test
@@ -115,7 +114,7 @@ abstract public class TaskManagerTest<T extends TaskManager> {
                 120, 2);
         final Task savedSub = taskManager.getTaskByNumber(3);
         assertNotNull(savedSub, "Задача не найдена.");
-        assertEquals(testSub, savedSub, "Задачи не совпадают.");
+        assertEquals(savedSub, testSub, "Задачи не совпадают.");
     }
 
     @Test
@@ -124,7 +123,7 @@ abstract public class TaskManagerTest<T extends TaskManager> {
         taskManager.createTask(new Task(0, "1", "Таск", "13.08.2022, 10:00", 20));
         final Task savedTask = taskManager.getlistTask().get(4);
         assertNotNull(savedTask, "Задача не найдена.");
-        assertEquals(testTask, savedTask, "Задачи не совпадают.");
+        assertEquals(savedTask, testTask, "Задачи не совпадают.");
     }
 
     @Test
@@ -135,7 +134,7 @@ abstract public class TaskManagerTest<T extends TaskManager> {
                 "2022-08-13T14:00", "120"));
         final EpicTask savedEpic = taskManager.getlistEpicTask().get(4);
         assertNotNull(savedEpic, "Задача не найдена.");
-        assertEquals(testEpic, savedEpic, "Задачи не совпадают.");
+        assertEquals(savedEpic, testEpic, "Задачи не совпадают.");
     }
 
     @Test
@@ -146,7 +145,7 @@ abstract public class TaskManagerTest<T extends TaskManager> {
                 120, 2));
         final SubTask savedSub = taskManager.getlistSubTask().get(4);
         assertNotNull(savedSub, "Задача не найдена.");
-        assertEquals(testSub, savedSub, "Задачи не совпадают.");
+        assertEquals(savedSub, testSub, "Задачи не совпадают.");
     }
 
     @Test
@@ -156,7 +155,7 @@ abstract public class TaskManagerTest<T extends TaskManager> {
         taskManager.refreshTask(task);
         final Task savedTask = taskManager.getlistTask().get(1);
         assertNotNull(savedTask, "Задача не найдена.");
-        assertEquals(testTask, savedTask, "Задачи не совпадают.");
+        assertEquals(savedTask, testTask, "Задачи не совпадают.");
     }
 
     @Test
@@ -169,7 +168,7 @@ abstract public class TaskManagerTest<T extends TaskManager> {
         taskManager.refreshTask(epic);
         final EpicTask savedEpic = taskManager.getlistEpicTask().get(2);
         assertNotNull(savedEpic, "Задача не найдена.");
-        assertEquals(testEpic, savedEpic, "Задачи не совпадают.");
+        assertEquals(savedEpic, testEpic, "Задачи не совпадают.");
     }
 
     @Test
@@ -180,7 +179,7 @@ abstract public class TaskManagerTest<T extends TaskManager> {
         taskManager.refreshTask(epic);
         final EpicTask savedEpic = taskManager.getlistEpicTask().get(2);
         assertNotNull(savedEpic, "Задача не найдена.");
-        assertEquals(testEpic, savedEpic, "Задачи не совпадают.");
+        assertEquals(savedEpic, testEpic, "Задачи не совпадают.");
     }
 
 
@@ -193,7 +192,7 @@ abstract public class TaskManagerTest<T extends TaskManager> {
         taskManager.refreshTask(sub);
         final SubTask savedSub = taskManager.getlistSubTask().get(3);
         assertNotNull(savedSub, "Задача не найдена.");
-        assertEquals(testSub, savedSub, "Задачи не совпадают.");
+        assertEquals(savedSub, testSub, "Задачи не совпадают.");
     }
 
     @Test
@@ -206,14 +205,14 @@ abstract public class TaskManagerTest<T extends TaskManager> {
         taskManager.refreshTask(sub);
         final SubTask savedSub = taskManager.getlistSubTask().get(3);
         assertNotNull(savedSub, "Задача не найдена.");
-        assertEquals(testSub, savedSub, "Задачи не совпадают.");
+        assertEquals(savedSub, testSub, "Задачи не совпадают.");
     }
 
     @Test
     public void clearTaskByNumber() {
         taskManager.clearTaskByNumber(1);
         assertNull(taskManager.getlistTask().get(1));
-        assertEquals(taskManager.getlistTask().size(), 0);
+        assertEquals(0, taskManager.getlistTask().size());
     }
 
     @Test
@@ -221,21 +220,21 @@ abstract public class TaskManagerTest<T extends TaskManager> {
         taskManager.clearTaskList();
         taskManager.clearTaskByNumber(1);
         assertNull(taskManager.getlistTask().get(1));
-        assertEquals(taskManager.getlistTask().size(), 0);
+        assertEquals(0, taskManager.getlistTask().size());
     }
 
     @Test
     public void clearTaskByNumberWithIncorrectNumber() {
         taskManager.clearTaskByNumber(5);
         assertNotNull(taskManager.getlistTask());
-        assertEquals(taskManager.getlistTask().size(), 1);
+        assertEquals(1, taskManager.getlistTask().size());
     }
 
     @Test
     public void clearEpicByNumber() {
         taskManager.clearTaskByNumber(2);
         assertNull(taskManager.getlistEpicTask().get(2));
-        assertEquals(taskManager.getlistEpicTask().size(), 0);
+        assertEquals(0, taskManager.getlistEpicTask().size());
     }
 
     @Test
@@ -243,14 +242,14 @@ abstract public class TaskManagerTest<T extends TaskManager> {
         taskManager.clearEpicTaskList();
         taskManager.clearTaskByNumber(1);
         assertNull(taskManager.getlistEpicTask().get(1));
-        assertEquals(taskManager.getlistEpicTask().size(), 0);
+        assertEquals(0, taskManager.getlistEpicTask().size());
     }
 
     @Test
     public void clearSubByNumber() {
         taskManager.clearTaskByNumber(3);
         assertNull(taskManager.getlistSubTask().get(3));
-        assertEquals(taskManager.getlistSubTask().size(), 0);
+        assertEquals(0, taskManager.getlistSubTask().size());
     }
 
     @Test
@@ -258,7 +257,7 @@ abstract public class TaskManagerTest<T extends TaskManager> {
         taskManager.clearSubTaskList();
         taskManager.clearTaskByNumber(1);
         assertNull(taskManager.getlistSubTask().get(1));
-        assertEquals(taskManager.getlistSubTask().size(), 0);
+        assertEquals(0, taskManager.getlistSubTask().size());
     }
 
     @Test
@@ -286,70 +285,65 @@ abstract public class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void checkEpicStatusWithSubAllNEW() {
+    public void checkEpicStatusWithSubAllNEW_TimeRefreshSub3First() {
         final EpicTask testEpic = new EpicTask(2, "2_Update", StatusTask.NEW, "Эпик", "2022-08-13T14:00",
-                "120");
+                "360");
         EpicTask epic = new EpicTask(2, "2_Update", StatusTask.IN_PROGRESS, "Эпик", "2022-08-13T14:00",
                 "120");
-        taskManager.createTask(new SubTask(4, "4", "Сабтаск", "13.08.2022, 14:00",
+        taskManager.createTask(new SubTask(0, "4", "Сабтаск", "13.08.2022, 18:00",
                 120, 2));
         taskManager.refreshTask(epic);
         final EpicTask savedEpic = taskManager.getlistEpicTask().get(2);
         assertNotNull(savedEpic, "Задача не найдена.");
-        assertEquals(testEpic, savedEpic, "Задачи не совпадают.");
+        assertEquals(savedEpic, testEpic, "Задачи не совпадают.");
     }
 
     @Test
-    public void checkEpicStatusWithSubAllDONE() {
-        final EpicTask testEpic = new EpicTask(2, "2_Update", StatusTask.DONE, "Эпик", "2022-08-13T14:00",
-                "120");
+    public void checkEpicStatusWithSubAllDONE_TimeRefreshSub3First() {
+        final EpicTask testEpic = new EpicTask(2, "2_Update", StatusTask.DONE, "Эпик", "2022-08-13T10:00",
+                "360");
         EpicTask epic = new EpicTask(2, "2_Update", StatusTask.NEW, "Эпик", "2022-08-13T14:00",
                 "120");
         taskManager.getlistSubTask().get(3).setTaskStatus(StatusTask.DONE);
-        taskManager.createTask(new SubTask(4, "4", StatusTask.DONE, "Сабтаск", "2022-08-13T14:00",
+        taskManager.createTask(new SubTask(0, "4", StatusTask.DONE, "Сабтаск", "2022-08-13T10:00",
                 "120", 2));
         taskManager.refreshTask(epic);
         final EpicTask savedEpic = taskManager.getlistEpicTask().get(2);
         assertNotNull(savedEpic, "Задача не найдена.");
-        assertEquals(testEpic, savedEpic, "Задачи не совпадают.");
+        assertEquals(savedEpic, testEpic, "Задачи не совпадают.");
     }
 
     @Test
-    public void checkEpicStatusWithSubNEWAndDONE() {
+    public void checkEpicStatusWithSubNEWAndDONE_TimeRefresh() {
         final EpicTask testEpic = new EpicTask(2, "2_Update", StatusTask.IN_PROGRESS, "Эпик", "2022-08-13T14:00",
-                "120");
-        EpicTask epic = new EpicTask(2, "2_Update", StatusTask.NEW, "Эпик", "2022-08-13T14:00",
-                "120");
-        taskManager.createTask(new SubTask(4, "4", StatusTask.DONE, "Сабтаск", "2022-08-13T14:00",
+                "240");
+        EpicTask epic = new EpicTask(2, "2_Update", StatusTask.NEW, "Эпик", "null",
+                "null");
+        taskManager.createTask(new SubTask(0, "4", StatusTask.DONE, "Сабтаск", "2022-08-13T16:00",
                 "120", 2));
         taskManager.refreshTask(epic);
         final EpicTask savedEpic = taskManager.getlistEpicTask().get(2);
         assertNotNull(savedEpic, "Задача не найдена.");
-        assertEquals(testEpic, savedEpic, "Задачи не совпадают.");
+        assertEquals(savedEpic, testEpic, "Задачи не совпадают.");
     }
 
     @Test
     public void checkEpicStatusWithSubAllIN_PROGRESS() {
         final EpicTask testEpic = new EpicTask(2, "2_Update", StatusTask.IN_PROGRESS, "Эпик", "2022-08-13T14:00",
                 "120");
+        ArrayList<Integer> sub = new ArrayList<>();
+        sub.add(3);
+        sub.add(4);
+        testEpic.setSubTaskIdentificator(sub);
         EpicTask epic = new EpicTask(2, "2_Update", StatusTask.NEW, "Эпик", "2022-08-13T14:00",
                 "120");
         taskManager.getlistSubTask().get(3).setTaskStatus(StatusTask.IN_PROGRESS);
-        taskManager.createTask(new SubTask(4, "4", StatusTask.IN_PROGRESS, "Сабтаск", "2022-08-13T14:00",
+        taskManager.createTask(new SubTask(0, "4", StatusTask.IN_PROGRESS, "Сабтаск", "2022-08-13T14:00",
                 "120", 2));
         taskManager.refreshTask(epic);
         final EpicTask savedEpic = taskManager.getlistEpicTask().get(2);
         assertNotNull(savedEpic, "Задача не найдена.");
-        assertEquals(testEpic, savedEpic, "Задачи не совпадают.");
+        assertEquals(savedEpic, testEpic, "Задачи не совпадают.");
     }
 
-
-    @Test
-    public abstract void checkEpicStatusWithEmptySubTaskList();
-
-    @Test
-    public abstract void checkEpicStatusWithAllNewSubTaskList();
-
-    @Test
-    public abstract void checkEpicStatusWithAllDoneSubTaskList();
 }
