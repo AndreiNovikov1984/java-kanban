@@ -1,5 +1,7 @@
-package Managers;
+package Tests;
 
+import Managers.InMemoryHistoryManager;
+import Managers.InMemoryTaskManager;
 import Tasks.EpicTask;
 import Tasks.SubTask;
 import Tasks.Task;
@@ -14,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryHistoryManagerTest {
 
-    InMemoryHistoryManager historyManager;
-    InMemoryTaskManager taskManager;
+    private InMemoryHistoryManager historyManager;
+    private InMemoryTaskManager taskManager;
 
     @BeforeEach
     public void beforeEach() {
@@ -28,12 +30,11 @@ class InMemoryHistoryManagerTest {
     }
 
     @AfterEach
-    private void afterEach() {
-        try {
+    public void afterEach() {
+        if (historyManager.getHistory() != null) {
             for (Task task : historyManager.getHistory()) {
                 historyManager.remove(task.getTaskId());
             }
-        } catch (NullPointerException exep) {
         }
     }
 

@@ -1,5 +1,6 @@
-package Managers;
+package Tests;
 
+import Managers.FileBackedTasksManager;
 import Tasks.EpicTask;
 import Tasks.SubTask;
 import Tasks.Task;
@@ -82,7 +83,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     public void loadfromFile() {
         File backUpFile = new File("testfile.csv");
         taskManager.getTaskByNumber(1);
-        FileBackedTasksManager taskManager1 = taskManager.loadFromFile(backUpFile);
+        FileBackedTasksManager taskManager1 = FileBackedTasksManager.loadFromFile(backUpFile);
         assertEquals(taskManager1.getHistory(), taskManager.getHistory());
         assertEquals(taskManager1.getTaskByNumber(1), taskManager.getTaskByNumber(1));
         assertEquals(taskManager1.getTaskByNumber(2), taskManager.getTaskByNumber(2));
@@ -92,7 +93,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     @Test
     public void loadfromFileEmptyHistory() {
         File backUpFile = new File("testfile.csv");
-        FileBackedTasksManager taskManager1 = taskManager.loadFromFile(backUpFile);
+        FileBackedTasksManager taskManager1 = FileBackedTasksManager.loadFromFile(backUpFile);
         assertEquals(taskManager1.getHistory(), taskManager.getHistory());
         assertEquals(taskManager1.getTaskByNumber(1), taskManager.getTaskByNumber(1));
         assertEquals(taskManager1.getTaskByNumber(2), taskManager.getTaskByNumber(2));
@@ -104,7 +105,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         File backUpFile = new File("testfile.csv");
         taskManager.clearTaskList();
         taskManager.clearEpicTaskList();
-        FileBackedTasksManager taskManager1 = taskManager.loadFromFile(backUpFile);
+        FileBackedTasksManager taskManager1 = FileBackedTasksManager.loadFromFile(backUpFile);
         assertEquals(taskManager1.getHistory(), taskManager.getHistory());
         assertEquals(taskManager1.getlistTask(), taskManager.getlistTask());
         assertEquals(taskManager1.getlistEpicTask(), taskManager.getlistEpicTask());
@@ -115,7 +116,7 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     public void loadfromFileEmptySub() {
         File backUpFile = new File("testfile.csv");
         taskManager.clearSubTaskList();
-        FileBackedTasksManager taskManager1 = taskManager.loadFromFile(backUpFile);
+        FileBackedTasksManager taskManager1 = FileBackedTasksManager.loadFromFile(backUpFile);
         assertEquals(taskManager1.getHistory(), taskManager.getHistory());
         assertEquals(taskManager1.getlistTask(), taskManager.getlistTask());
         assertEquals(taskManager1.getlistEpicTask(), taskManager.getlistEpicTask());

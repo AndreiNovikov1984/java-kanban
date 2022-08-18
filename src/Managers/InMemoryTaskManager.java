@@ -7,16 +7,14 @@ import Tasks.StatusTask;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private Map<Integer, Task> listTask = new HashMap<>();
-    private Map<Integer, EpicTask> listEpicTask = new HashMap<>();
-    private Map<Integer, SubTask> listSubTask = new HashMap<>();
+    final private Map<Integer, Task> listTask = new HashMap<>();
+    final private Map<Integer, EpicTask> listEpicTask = new HashMap<>();
+    final private Map<Integer, SubTask> listSubTask = new HashMap<>();
     private InMemoryHistoryManager historyManager = Managers.getDefaultHistory();
     protected Integer identificator = 0;
 
@@ -89,7 +87,7 @@ public class InMemoryTaskManager implements TaskManager {
                 taskByNum = listSubTask.get(subTaskNumber);
             }
         }
-        return (taskByNum == null ? null : taskByNum);
+        return taskByNum; //== null ? null : taskByNum);
     }
 
     @Override
@@ -216,7 +214,6 @@ public class InMemoryTaskManager implements TaskManager {
     protected EpicTask checkEpicTime(EpicTask epicTask) {
         LocalDateTime epicStartTime = LocalDateTime.of(2500, 1, 1, 0, 0);
         LocalDateTime epicEndTime = LocalDateTime.of(1900, 1, 1, 0, 0);
-        ;
         for (int subNum : epicTask.getSubTaskIdentificator()) {
             if (epicStartTime.isAfter(listSubTask.get(subNum).getTaskStartTime())) {
                 epicStartTime = listSubTask.get(subNum).getTaskStartTime();
@@ -234,7 +231,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public List<Task> getHistory() { // метод получения истории просмотров
+    public List<Task> getHistory() {                // метод получения истории просмотров
         if (historyManager.getHistory() == null) {
             System.out.println("Не было просмотрено ни одной задачи");
         } else {
@@ -247,7 +244,30 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
-    public InMemoryHistoryManager getHistoryManager() {
+    public InMemoryHistoryManager getHistoryManager() {     // метод получения менеджера истории просмотров
         return historyManager;
+    }
+
+    @Override
+    public Set<Task> getPrioritizedTasks() {            // метод получения сортированного списка
+        System.out.println("Cписок в сорт виде: " + Sort.getSortedTaskTree());
+        return Sort.getSortedTaskTree();
+    }
+
+    @Override
+    public List<Integer> validateTaskTime(Task task) {              // метод проверки пересечения задач
+        List<Integer> collected = Sort.getSortedTaskTree().stream()
+                .filter(t -> t.getTaskId() != task.getTaskId())
+                .filter(t -> ((t.getTaskStartTime().isBefore(task.getTaskStartTime()) && (t.getTaskEndTime().isAfter(task.getTaskStartTime())))) ||
+                        (t.getTaskStartTime().isBefore(task.getTaskEndTime()) && (t.getTaskEndTime().isAfter(task.getTaskEndTime()))) ||
+                        (t.getTaskStartTime().isBefore(task.getTaskStartTime()) && (t.getTaskEndTime().isAfter(task.getTaskEndTime()))) ||
+                        (t.getTaskStartTime().isAfter(task.getTaskStartTime()) && (t.getTaskEndTime().isBefore(task.getTaskEndTime()))))
+                .map(t -> t.getTaskId())
+                .collect(Collectors.toList());
+        if (collected.size() != 0) {
+            System.out.println("У задачи ID " + task.getTaskId() + " выявлено пересечение со следующими задачами - ID: "
+                    + collected + ". Пожалуйста, внесите изменения.");
+        }
+        return collected;
     }
 }

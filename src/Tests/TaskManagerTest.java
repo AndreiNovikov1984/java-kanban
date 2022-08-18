@@ -1,5 +1,6 @@
-package Managers;
+package Tests;
 
+import Managers.TaskManager;
 import Tasks.EpicTask;
 import Tasks.StatusTask;
 import Tasks.SubTask;
@@ -14,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 abstract public class TaskManagerTest<T extends TaskManager> {
-    T taskManager;
+    protected T taskManager;
 
     @BeforeEach
     public void beforeEach() {
@@ -279,9 +280,8 @@ abstract public class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void getSubTaskByEpicNumberWithIncorrectNumber() {
-        final ArrayList<Integer> testSubList = null;
         final ArrayList<Integer> saveSubList = taskManager.getSubTaskByEpicNumber(5);
-        assertEquals(saveSubList, testSubList);
+        assertEquals(saveSubList, null);
     }
 
     @Test

@@ -7,6 +7,7 @@ import Tasks.SubTask;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface TaskManager {
 
@@ -41,4 +42,9 @@ public interface TaskManager {
     ArrayList<Integer> getSubTaskByEpicNumber(int taskIdentificator);   // метод получения подзадач определенного эпика
 
     List<Task> getHistory(); // метод получения истории просмотров
+
+    Set<Task> getPrioritizedTasks();  // метод получения сортированного списка
+
+    List<Integer> validateTaskTime(Task task); // метод проверки пересечения задач
+
 }

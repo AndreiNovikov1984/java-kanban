@@ -7,12 +7,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
@@ -21,8 +19,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public FileBackedTasksManager(File backUpFile) {
         this.backUpFile = backUpFile;
     }
-
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
 
     public static void main(String[] args) {
         File backUpFile = new File("backup.csv");
@@ -90,8 +86,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     @Override
     public Task getTaskByNumber(int taskIdentificator) { // метод получения данных о задаче по идентификатору
-        Task taskByNum;
-        return taskByNum = super.getTaskByNumber(taskIdentificator);
+        return super.getTaskByNumber(taskIdentificator);
     }
 
     @Override
@@ -176,25 +171,14 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-    public Set<Task> getPrioritizedTasks() {
-        System.out.println("Cписок в сорт виде: " + Sort.getSortedTaskTree());
-        return Sort.getSortedTaskTree();
+    @Override
+    public Set<Task> getPrioritizedTasks() {            // метод получения сортированного списка
+        return super.getPrioritizedTasks();
     }
 
-    protected List<Integer> validateTaskTime(Task task) {
-        List<Integer> collected = Sort.getSortedTaskTree().stream()
-                .filter(t -> t.getTaskId() != task.getTaskId())
-                .filter(t -> ((t.getTaskStartTime().isBefore(task.getTaskStartTime()) && (t.getTaskEndTime().isAfter(task.getTaskStartTime())))) ||
-                        (t.getTaskStartTime().isBefore(task.getTaskEndTime()) && (t.getTaskEndTime().isAfter(task.getTaskEndTime()))) ||
-                        (t.getTaskStartTime().isBefore(task.getTaskStartTime()) && (t.getTaskEndTime().isAfter(task.getTaskEndTime()))) ||
-                        (t.getTaskStartTime().isAfter(task.getTaskStartTime()) && (t.getTaskEndTime().isBefore(task.getTaskEndTime()))))
-                .map(t -> t.getTaskId())
-                .collect(Collectors.toList());
-        if (collected.size() != 0) {
-            System.out.println("У задачи ID " + task.getTaskId() + " выявлено пересечение со следующими задачами - ID: "
-                    + collected + ". Пожалуйста, внесите изменения.");
-        }
-        return collected;
+    @Override
+    public List<Integer> validateTaskTime(Task task) {              // метод проверки пересечения задач
+        return super.validateTaskTime(task);
     }
 
     public static FileBackedTasksManager loadFromFile(File backUpFile) {      // метод загрузки данных из файла
@@ -202,13 +186,13 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         try {
             String value = Files.readString(backUpFile.toPath());
             String[] lines = value.split("\n");
-            Integer maxID = 0;
+            int maxID = 0;
             for (int i = 1; i < lines.length; i++) {
                 String[] line = lines[i].split(",");
                 if (line[0].equals("")) {
                     line = lines[i + 1].split(",");
                     for (int j = 0; j < line.length; j++) {
-                        Convert.fromString(Integer.parseInt(line[j].trim()), taskManager.getHistoryManager());
+                        Convert.fromString(Integer.parseInt(line[j].trim()), taskManager.getHistoryManager(), taskManager);
                     }
                     break;
                 } else if (TypeTask.valueOf(line[1].trim()) == TypeTask.TASK) {

@@ -8,7 +8,7 @@ import Tasks.Task;
 public class Convert<T extends Task> {
 
     protected static String toString(Task task) {                // метод перевода данных для файла TASK и EPICTASK
-        return Integer.toString(task.getTaskId()) +
+        return task.getTaskId() +
                 "," + task.getTaskType() +
                 "," + task.getTaskName() +
                 "," + task.getTaskStatus() +
@@ -31,7 +31,7 @@ public class Convert<T extends Task> {
     }
 
     protected static String toString(SubTask subTask) {                    // метод перевода данных для файла SUBTASK
-        return Integer.toString(subTask.getTaskId()) +
+        return subTask.getTaskId() +
                 "," + subTask.getTaskType() +
                 "," + subTask.getTaskName() +
                 "," + subTask.getTaskStatus() +
@@ -42,7 +42,6 @@ public class Convert<T extends Task> {
     }
 
     protected static SubTask fromStringSub(String[] line) {               // метод восстановления SUBTASK из файла
-        InMemoryTaskManager taskManager = new InMemoryTaskManager();
         SubTask subTask = new SubTask(Integer.parseInt(line[0].trim()), line[2].trim(),
                 StatusTask.valueOf(line[3].trim()), line[4].trim(), line[5].trim(), line[6].trim(),
                 Integer.parseInt(line[7].trim()));
@@ -53,7 +52,7 @@ public class Convert<T extends Task> {
         StringBuilder saveStr = new StringBuilder();
         try {
             for (Task taskHistory : manager.getHistory()) {
-                saveStr.append(Integer.toString(taskHistory.getTaskId()) + ",");
+                saveStr.append(taskHistory.getTaskId() + ",");
             }
         } catch (NullPointerException exception) {
         }
@@ -61,9 +60,7 @@ public class Convert<T extends Task> {
     }
 
     protected static void fromString(Integer number,                // метод восстановления истории просмотров из файла
-                                     InMemoryHistoryManager historyManager) {
-        InMemoryTaskManager taskManager = Managers.getDefault();
-
+                                     InMemoryHistoryManager historyManager, FileBackedTasksManager taskManager) {
         for (Task task : taskManager.getlistTask().values()) {
             if (task.getTaskId() == number) {
                 historyManager.add(task);
