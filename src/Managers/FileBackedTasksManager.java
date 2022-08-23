@@ -86,7 +86,9 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     @Override
     public Task getTaskByNumber(int taskIdentificator) { // метод получения данных о задаче по идентификатору
-        return super.getTaskByNumber(taskIdentificator);
+        Task task = super.getTaskByNumber(taskIdentificator);
+        save();
+        return task;
     }
 
     @Override

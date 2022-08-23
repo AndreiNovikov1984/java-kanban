@@ -5,7 +5,6 @@ import Managers.InMemoryTaskManager;
 import Tasks.EpicTask;
 import Tasks.SubTask;
 import Tasks.Task;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,15 +26,6 @@ class InMemoryHistoryManagerTest {
         taskManager.createTask(new EpicTask(0, "2", "Эпик"));
         taskManager.createTask(new SubTask(0, "3", "Сабтаск", "13.08.2022, 14:00",
                 120, 2));
-    }
-
-    @AfterEach
-    public void afterEach() {
-        if (historyManager.getHistory() != null) {
-            for (Task task : historyManager.getHistory()) {
-                historyManager.remove(task.getTaskId());
-            }
-        }
     }
 
     @Test

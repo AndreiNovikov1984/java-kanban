@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private static HashMap<Integer, Node> mapHistory = new HashMap<>();
-    private static List<Task> listHistory = new ArrayList<>();
-    private static Integer historySize = 0;
-    private static Node tail;
-    private static Node head;
+    private HashMap<Integer, Node> mapHistory = new HashMap<>();
+    private List<Task> listHistory = new ArrayList<>();
+    private Integer historySize = 0;
+    private Node tail;
+    private Node head;
 
     @Override
     public void add(Task task) {                                // метод добавления задачи в историю просмотра
@@ -35,7 +35,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public void remove(int id) {                             //метод удаления задачи из истории просмотра
         if (mapHistory.containsKey(id)) {
-            Node.removeNode(mapHistory.get(id));
+            removeNode(mapHistory.get(id));
             historySize--;
             mapHistory.remove(id);
         } else {
@@ -66,9 +66,30 @@ public class InMemoryHistoryManager implements HistoryManager {
         historySize++;
         return newNode;
     }
+    void removeNode(Node element) {                          // метод удаления узла
+        if ((element.prev == null) && (element.next == null)) {
+            element = null;
+        } else if (element.prev == null) {
+            Node nextEl = element.next;
+            nextEl.prev = null;
+            head = element.next;
+            element = null;
+        } else if (element.next == null) {
+            Node prevEl = element.prev;
+            prevEl.next = null;
+            tail = element.prev;
+            element = null;
+        } else {
+            Node prevEl = element.prev;
+            Node nextEl = element.next;
+            prevEl.next = nextEl;
+            nextEl.prev = prevEl;
+            element = null;
+        }
+    }
 
 
-    static class Node<Task> {
+    public class Node<Task> {
         public Task data;
         public Node<Task> next;
         public Node<Task> prev;
@@ -77,25 +98,6 @@ public class InMemoryHistoryManager implements HistoryManager {
             this.next = next;
             this.data = data;
             this.prev = prev;
-        }
-
-        static void removeNode(Node element) {                          // метод удаления узла
-            if ((element.prev == null) && (element.next == null)) {
-                element = null;
-            } else if (element.prev == null) {
-                Node nextEl = element.next;
-                nextEl.prev = null;
-                head = element.next;
-            } else if (element.next == null) {
-                Node prevEl = element.prev;
-                prevEl.next = null;
-                tail = element.prev;
-            } else {
-                Node prevEl = element.prev;
-                Node nextEl = element.next;
-                prevEl.next = nextEl;
-                nextEl.prev = prevEl;
-            }
         }
     }
 }

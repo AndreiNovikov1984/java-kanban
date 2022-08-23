@@ -64,8 +64,13 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
         final Set<Task> setTask = taskManager.getPrioritizedTasks();
         int k = 0;
         for (Task task : setTask) {
-            assertEquals(task, taskManager.getTaskByNumber((1 + k) % 4));
-            k = k + 2;
+            if (k == 0) {
+                assertEquals(task, taskManager.getlistTask().get(1));
+            }
+            if (k == 1) {
+                assertEquals(task, taskManager.getlistSubTask().get(3));
+            }
+            k++;
         }
     }
 

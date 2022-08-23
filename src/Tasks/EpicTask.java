@@ -6,16 +6,17 @@ import java.util.ArrayList;
 
 public class EpicTask extends Task {
 
-    protected final TypeTask taskType = TypeTask.EPICTASK;
     private ArrayList<Integer> subTaskIdentificator;
 
     public EpicTask(int taskId, String taskName, String taskDescription) {
         super(taskId, taskName, taskDescription);
+        this.taskType = TypeTask.EPICTASK;
     }
 
     public EpicTask(int taskId, String taskName, StatusTask taskStatus, String taskDescription, String time,
                     String durationTask) {
         super(taskId, taskName, taskStatus, taskDescription, time, durationTask);
+        this.taskType = TypeTask.EPICTASK;
     }
 
     @Override

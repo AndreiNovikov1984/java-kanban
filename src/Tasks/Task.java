@@ -7,9 +7,10 @@ import java.util.Comparator;
 import java.util.Objects;
 
 public class Task {
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
+
+    transient DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm");
     protected int taskId;
-    protected final TypeTask taskType = TypeTask.TASK;
+    protected TypeTask taskType;
     protected final String taskName;
     protected final String taskDescription;
     protected StatusTask taskStatus = StatusTask.NEW;
@@ -22,6 +23,7 @@ public class Task {
         this.taskId = taskId;
         this.taskName = taskName;
         this.taskDescription = taskDescription;
+        this.taskType = TypeTask.TASK;
     }
 
     public Task(int taskId, String taskName, String taskDescription, String time, long durationTask) {
@@ -30,7 +32,7 @@ public class Task {
         this.taskDescription = taskDescription;
         this.taskStartTime = LocalDateTime.parse(time, formatter);
         this.taskDuration = Duration.ofMinutes(durationTask);
-
+        this.taskType = TypeTask.TASK;
     }
 
     public Task(int taskId, String taskName, StatusTask taskStatus, String taskDescription, String time, String durationTask) {
