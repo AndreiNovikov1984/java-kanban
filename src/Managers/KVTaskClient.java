@@ -20,7 +20,6 @@ public class KVTaskClient {
 
     public void saveOnServer(String key, String backUpOnline) {  //метод сохранения данных на сервере
         URI uri = URI.create(host + PORT + "/save/" + key + "?API_TOKEN=" + token);
-        HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = null;
 
         request = HttpRequest.newBuilder()

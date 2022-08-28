@@ -34,7 +34,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 "выбрать курс пройти курс усвоить весь материал"));
         taskManager.createTask(new EpicTask(0, "Выучить уроки", "усвоить весь материал"));
         taskManager.createTask(new SubTask(0, "Выбрать курс",
-                "изучить всех поставщиков курсов", "13.08.2022, 14:00", 120, 3));
+                "изучить всех поставщиков курсов", "13.08.2022, 14:00", 120, 2));
         taskManager.createTask(new SubTask(0, "Пройти курс", "выполнить все задания",
                 "13.08.2022, 15:00", 60, 3));
         taskManager.createTask(new SubTask(0, "Найти учебник", "открыть учебник/закрыть учебник",

@@ -38,5 +38,6 @@ public class Main {
         HttpTaskManager taskManager1 = HttpTaskManager.loadOnline("Andrei");
         taskManager1.getHistory();
         serverKV.stop();
+        httpTaskServer.stop();
     }
 }

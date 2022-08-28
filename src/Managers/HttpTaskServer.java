@@ -50,7 +50,7 @@ public class HttpTaskServer {
 
             switch (method) {
                 case "GET":
-                    if (splitPath.length == 2) {
+                    if ((splitPath.length == 2) && (splitPath[1].equals("tasks"))) {
                         ArrayList<Task> listTask = new ArrayList<>();
                         for (Task task : taskManager.getlistTask().values()) {
                             listTask.add(task);
@@ -65,7 +65,7 @@ public class HttpTaskServer {
                         break;
                     }
                     if (splitPath[2].equals("task")) {
-                        if (taskNum != 0) {
+                        if ((taskNum != 0)) {
                             response = gson.toJson(taskManager.getTaskByNumber(taskNum));
                             break;
                         }
@@ -87,7 +87,7 @@ public class HttpTaskServer {
                             break;
                         }
                         if (splitPath[3].equals("epic")) {
-                            if (taskNum != 0) {
+                            if ((taskNum != 0) && (taskManager.getlistEpicTask().containsKey(taskNum))) {
                                 ArrayList<Task> listTask = new ArrayList<>();
                                 for (int num : taskManager.getSubTaskByEpicNumber(taskNum)) {
                                     listTask.add(taskManager.getTaskByNumber(num));
@@ -103,7 +103,10 @@ public class HttpTaskServer {
                     if (splitPath[2].equals("history")) {
                         response = gson.toJson(taskManager.getHistory());
                         break;
+                    } else {
+                        response = "Error! Ошибка в URI! Введите корректный адрес";
                     }
+                    break;
                 case "POST":
                     InputStream inputStream = httpExchange.getRequestBody();
                     String body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
@@ -160,6 +163,9 @@ public class HttpTaskServer {
                         taskManager.clearSubTaskList();
                         response = "Delete! Удалены все подзадачи";
                         break;
+                    } else {
+                        response = "Error! Ошибка в URI! Введите корректный адрес";
+                        break;
                     }
             }
             if (response == null) {
@@ -205,7 +211,7 @@ public class HttpTaskServer {
     }
 
     public void stop() {
-        System.out.println("Запускаем сервер на порту " + PORT);
+        System.out.println("Останавливаем сервер на порту " + PORT);
         httpTaskServer.stop(0);
     }
 
