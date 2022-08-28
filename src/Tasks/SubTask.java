@@ -2,7 +2,6 @@ package Tasks;
 
 public class SubTask extends Task {
 
- //   protected final TypeTask subTaskType = TypeTask.SUBTASK;
     private Integer epicTaskIdentificator;
 
     public SubTask(int taskId, String taskName, String taskDescription, String time, long durationTask, Integer epicTaskIdentificator) {

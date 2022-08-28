@@ -8,8 +8,11 @@ import Tasks.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -18,7 +21,7 @@ abstract public class TaskManagerTest<T extends TaskManager> {
     protected T taskManager;
 
     @BeforeEach
-    public void beforeEach() {
+    public void beforeEach() throws IOException {
         taskManager.createTask(new Task(0, "1", "Таск", "13.08.2022, 10:00", 20));
         taskManager.createTask(new EpicTask(0, "2", "Эпик"));
         taskManager.createTask(new SubTask(0, "3", "Сабтаск", "13.08.2022, 14:00",
@@ -344,6 +347,31 @@ abstract public class TaskManagerTest<T extends TaskManager> {
         final EpicTask savedEpic = taskManager.getlistEpicTask().get(2);
         assertNotNull(savedEpic, "Задача не найдена.");
         assertEquals(savedEpic, testEpic, "Задачи не совпадают.");
+    }
+
+    @Test
+    public void getPrioritizedTasks() {
+        final Set<Task> setTask = taskManager.getPrioritizedTasks();
+        int k = 0;
+        for (Task task : setTask) {
+            if (k == 0) {
+                assertEquals(task, taskManager.getlistTask().get(1));
+            }
+            if (k == 1) {
+                assertEquals(task, taskManager.getlistSubTask().get(3));
+            }
+            k++;
+        }
+    }
+
+    @Test
+    public void validateTaskTime() {
+        List<Integer> testValid = new ArrayList<>();
+        testValid.add(1);
+        testValid.add(3);
+        taskManager.createTask(new Task(0, "4", "Таск", "13.08.2022, 10:10", 300));
+        List<Integer> valid = taskManager.validateTaskTime(taskManager.getTaskByNumber(4));
+        assertEquals(valid, testValid);
     }
 
 }

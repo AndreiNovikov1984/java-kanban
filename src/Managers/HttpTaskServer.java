@@ -8,8 +8,6 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
-import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -17,44 +15,21 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class HttpTaskServer {
 
     private static final int PORT = 8080;
-    private static Gson gson = new Gson();
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
+    private final HttpServer httpTaskServer;
+    private static Gson gson = new Gson();
 
-
-    public void httpTaskServer() throws IOException {       //метод запуска httpTaskServer
-        InMemoryTaskManager taskManager = Managers.getDefault();
-        taskManager.createTask(new Task(0, "Переезд", "Собрать вещи перевезти разобрать",
-                "13.08.2022, 10:00", 20));
-        taskManager.createTask(new EpicTask(0, "Обучение Java",
-                "выбрать курс пройти курс усвоить весь материал"));
-        EpicTask epic = new EpicTask(7, "Обучение Java",
-                "выбрать курс пройти курс усвоить весь материал");
-        taskManager.createTask(new EpicTask(0, "Выучить уроки", "усвоить весь материал"));
-        taskManager.createTask(new SubTask(0, "Выбрать курс",
-                "изучить всех поставщиков курсов", "13.08.2022, 14:00", 120, 3));
-        taskManager.createTask(new SubTask(0, "Пройти курс", "выполнить все задания",
-                "13.08.2022, 15:00", 60, 3));
-        taskManager.createTask(new SubTask(0, "Найти учебник", "открыть учебник/закрыть учебник",
-                "13.08.2022, 15:50", 15, 3));
-        taskManager.createTask(new Task(0, "Покупка стола", "Выбрать стол купить привезти",
-                "13.08.2022, 10:10", 120));
-        taskManager.getTaskByNumber(1);
-        taskManager.getTaskByNumber(2);
-
-        HttpServer httpServer = HttpServer.create();
-
-        httpServer.bind(new InetSocketAddress(PORT), 0);
-        httpServer.createContext("/tasks", new TaskHandler(taskManager));
-        httpServer.start(); // запускаем сервер
-
-        System.out.println("HTTP-сервер запущен на " + PORT + " порту!");
-
-
+    public HttpTaskServer() throws IOException {
+        FileBackedTasksManager taskManager = FileBackedTasksManager.loadFromFile(Paths.get("backupOnline.csv"));
+        httpTaskServer = HttpServer.create();
+        httpTaskServer.bind(new InetSocketAddress(PORT), 0);
+        httpTaskServer.createContext("/tasks", new TaskHandler(taskManager));
     }
 
     static class TaskHandler implements HttpHandler {
@@ -67,18 +42,9 @@ public class HttpTaskServer {
         @Override
         public void handle(HttpExchange httpExchange) throws IOException {    // метод обработки запросов httpTaskServer
             String response = null;
-            Integer taskNum = null;
             String method = httpExchange.getRequestMethod();
             URI requestURI = httpExchange.getRequestURI();
-            if (requestURI.toString().contains("=")) {
-                String subURI = requestURI.toString().substring(requestURI.toString().indexOf('=') + 1
-                );
-                try {
-                    taskNum = Integer.parseInt(subURI);
-                } catch (NumberFormatException e) {
-                    response = "Error! Ошибка в URI! Введите корректный адрес";
-                }
-            }
+            int taskNum = getTaskNumber(requestURI);
             String path = requestURI.getPath();
             String[] splitPath = path.split("/");
 
@@ -88,16 +54,18 @@ public class HttpTaskServer {
                         ArrayList<Task> listTask = new ArrayList<>();
                         for (Task task : taskManager.getlistTask().values()) {
                             listTask.add(task);
-                        } for (Task task : taskManager.getlistEpicTask().values()) {
+                        }
+                        for (Task task : taskManager.getlistEpicTask().values()) {
                             listTask.add(task);
-                        } for (Task task : taskManager.getlistSubTask().values()) {
+                        }
+                        for (Task task : taskManager.getlistSubTask().values()) {
                             listTask.add(task);
                         }
                         response = gson.toJson(listTask);
                         break;
                     }
                     if (splitPath[2].equals("task")) {
-                        if (taskNum != null) {
+                        if (taskNum != 0) {
                             response = gson.toJson(taskManager.getTaskByNumber(taskNum));
                             break;
                         }
@@ -119,7 +87,7 @@ public class HttpTaskServer {
                             break;
                         }
                         if (splitPath[3].equals("epic")) {
-                            if (taskNum != null) {
+                            if (taskNum != 0) {
                                 ArrayList<Task> listTask = new ArrayList<>();
                                 for (int num : taskManager.getSubTaskByEpicNumber(taskNum)) {
                                     listTask.add(taskManager.getTaskByNumber(num));
@@ -139,17 +107,37 @@ public class HttpTaskServer {
                 case "POST":
                     InputStream inputStream = httpExchange.getRequestBody();
                     String body = new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
-                    if (body.contains("taskType")) {
-                        taskManager.createTask(gson.fromJson(body, Task.class));
-                } if (body.contains("epicType")) {
-                    taskManager.createTask(gson.fromJson(body, EpicTask.class));
-                } if (body.contains("subTaskType")) {
-                    taskManager.createTask(gson.fromJson(body, SubTask.class));
-                }
-                            break;
+                    if (body.contains("EPICTASK")) {
+                        EpicTask task = gson.fromJson(body, EpicTask.class);
+                        response = "POST";
+                        if (taskManager.getlistEpicTask().containsKey(task.getTaskId())) {
+                            taskManager.refreshTask(task);
+                        } else {
+                            taskManager.createTask(task);
+                        }
+                    } else if (body.contains("SUBTASK")) {
+                        SubTask task = gson.fromJson(body, SubTask.class);
+                        response = "POST";
+                        if (taskManager.getlistSubTask().containsKey(task.getTaskId())) {
+                            taskManager.refreshTask(task);
+                        } else {
+                            taskManager.createTask(task);
+                        }
+                    } else if (body.contains("TASK")) {
+                        Task task = gson.fromJson(body, Task.class);
+                        response = "POST";
+                        if (taskManager.getlistTask().containsKey(task.getTaskId())) {
+                            taskManager.refreshTask(task);
+                        } else {
+                            taskManager.createTask(task);
+                        }
+                    } else {
+                        response = null;
+                    }
+                    break;
                 case "DELETE":
                     if (splitPath[2].equals("task")) {
-                        if (taskNum != null) {
+                        if (taskNum != 0) {
                             taskManager.clearTaskByNumber(taskNum);
                             response = "Delete! Удалена задача под номером - " + taskNum;
                             break;
@@ -174,12 +162,51 @@ public class HttpTaskServer {
                         break;
                     }
             }
-
-            httpExchange.sendResponseHeaders(200, 0);
+            if (response == null) {
+                httpExchange.sendResponseHeaders(400, 0);
+                response = "Непредвиденная ошибка! Проверьте корректность запроса";
+            } else if (response.equals("null") || response.equals("{}")) {
+                httpExchange.sendResponseHeaders(404, 0);
+                response = "Данная задача отсутствует или ранее удалена.";
+            } else if (response.contains("Error")) {
+                httpExchange.sendResponseHeaders(404, 0);
+            } else if (response.contains("Delete")) {
+                httpExchange.sendResponseHeaders(200, 0);
+            } else if (response.equals("POST")) {
+                httpExchange.sendResponseHeaders(201, 0);
+                response = "Загрузка успешно завершена";
+            } else {
+                httpExchange.sendResponseHeaders(200, 0);
+            }
 
             try (OutputStream os = httpExchange.getResponseBody()) {
                 os.write(response.getBytes());
             }
         }
+
+        private int getTaskNumber(URI requestURI) {
+            int taskNum = 0;
+            String line = requestURI.getRawQuery();
+            if (line != null) {
+                String subURI = line.substring(3);
+                try {
+                    taskNum = Integer.parseInt(subURI);
+                } catch (NumberFormatException e) {
+                    System.out.println("Error! Ошибка в URI! Введите корректный адрес");
+                }
+            }
+            return taskNum;
+        }
     }
+
+    public void start() {
+        System.out.println("Запускаем сервер на порту " + PORT);
+        httpTaskServer.start();
+    }
+
+    public void stop() {
+        System.out.println("Запускаем сервер на порту " + PORT);
+        httpTaskServer.stop(0);
+    }
+
 }

@@ -25,7 +25,6 @@ public class Sort {
 
     private static Set<Task> sortedTaskTree = new TreeSet<>(taskComparator);
 
-
     protected static void sort(Map<Integer, Task> listTask, Map<Integer, SubTask> listSubTask) {
         sortedTaskTree.clear();
         for (Task task : listTask.values()) {

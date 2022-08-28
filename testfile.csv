@@ -1,5 +1,4 @@
 id,type,name,status,description,taskStartTime, taskDuration, epic
-1,TASK,1,NEW,Таск,2022-08-13T10:00,20
 2,EPICTASK,2,NEW,Эпик,2022-08-13T14:00,120
 3,SUBTASK,3,NEW,Сабтаск,2022-08-13T14:00,120,2
 

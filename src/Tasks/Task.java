@@ -3,7 +3,6 @@ package Tasks;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Comparator;
 import java.util.Objects;
 
 public class Task {
@@ -18,25 +17,25 @@ public class Task {
     protected Duration taskDuration;
     protected LocalDateTime taskEndTime;
 
-
     public Task(int taskId, String taskName, String taskDescription) {
         this.taskId = taskId;
+        this.taskType = TypeTask.TASK;
         this.taskName = taskName;
         this.taskDescription = taskDescription;
-        this.taskType = TypeTask.TASK;
     }
 
     public Task(int taskId, String taskName, String taskDescription, String time, long durationTask) {
         this.taskId = taskId;
+        this.taskType = TypeTask.TASK;
         this.taskName = taskName;
         this.taskDescription = taskDescription;
         this.taskStartTime = LocalDateTime.parse(time, formatter);
         this.taskDuration = Duration.ofMinutes(durationTask);
-        this.taskType = TypeTask.TASK;
     }
 
     public Task(int taskId, String taskName, StatusTask taskStatus, String taskDescription, String time, String durationTask) {
         this.taskId = taskId;
+        this.taskType = TypeTask.TASK;
         this.taskName = taskName;
         this.taskStatus = taskStatus;
         this.taskDescription = taskDescription;

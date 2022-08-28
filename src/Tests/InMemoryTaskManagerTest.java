@@ -6,13 +6,15 @@ import Tasks.SubTask;
 import Tasks.Task;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.io.IOException;
+
 
 class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 
 
     @Override
     @BeforeEach
-    public void beforeEach() {
+    public void beforeEach() throws IOException {
         taskManager = new InMemoryTaskManager();
         taskManager.createTask(new Task(0, "1", "Таск", "13.08.2022, 10:00", 20));
         taskManager.createTask(new EpicTask(0, "2", "Эпик"));

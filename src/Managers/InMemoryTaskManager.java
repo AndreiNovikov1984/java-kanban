@@ -39,6 +39,7 @@ public class InMemoryTaskManager implements TaskManager {
             historyManager.remove(taskNumber);
         }
         listTask.clear();
+        Sort.sort(getlistTask(), getlistSubTask());
     }
 
     @Override
@@ -49,6 +50,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         listEpicTask.clear();
         clearSubTaskList();
+        Sort.sort(getlistTask(), getlistSubTask());
     }
 
     @Override
@@ -61,6 +63,7 @@ public class InMemoryTaskManager implements TaskManager {
             listEpicTask.get(epicTaskNumber).setSubTaskIdentificator(null);
             listEpicTask.get(epicTaskNumber).setTaskStatus(StatusTask.NEW);
         }
+        Sort.sort(getlistTask(), getlistSubTask());
     }
 
     @Override
@@ -94,6 +97,8 @@ public class InMemoryTaskManager implements TaskManager {
     public void createTask(Task task) {      // метод создания задачи
         task.setTaskId(++identificator);
         listTask.put(task.getTaskId(), task);
+        Sort.sort(getlistTask(), getlistSubTask());
+        validateTaskTime(task);
     }
 
     @Override
@@ -108,11 +113,15 @@ public class InMemoryTaskManager implements TaskManager {
         subTask.setTaskId(++identificator);
         listSubTask.put(subTask.getTaskId(), subTask);
         refreshTask(listEpicTask.get(subTask.getEpicTaskIdentificator()));
+        Sort.sort(getlistTask(), getlistSubTask());
+        validateTaskTime(subTask);
     }
 
     @Override
     public void refreshTask(Task task) {                    // метод обновление задачи
         listTask.put(task.getTaskId(), task);
+        Sort.sort(getlistTask(), getlistSubTask());
+        validateTaskTime(task);
     }
 
     @Override
@@ -132,6 +141,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         epicTask.setSubTaskIdentificator(subTaskNumberTemporary);
         listEpicTask.put(epicTask.getTaskId(), checkEpicTime(epicTask));
+        Sort.sort(getlistTask(), getlistSubTask());
     }
 
     @Override
@@ -140,6 +150,8 @@ public class InMemoryTaskManager implements TaskManager {
         if (listEpicTask.containsKey(subTask.getEpicTaskIdentificator())) {
             refreshTask(listEpicTask.get(subTask.getEpicTaskIdentificator()));
         }
+        Sort.sort(getlistTask(), getlistSubTask());
+        validateTaskTime(subTask);
     }
 
     @Override
@@ -177,6 +189,7 @@ public class InMemoryTaskManager implements TaskManager {
                 return;
             }
         }
+        Sort.sort(getlistTask(), getlistSubTask());
     }
 
     @Override

@@ -66,6 +66,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         historySize++;
         return newNode;
     }
+
     void removeNode(Node element) {                          // метод удаления узла
         if ((element.prev == null) && (element.next == null)) {
             element = null;
@@ -87,7 +88,6 @@ public class InMemoryHistoryManager implements HistoryManager {
             element = null;
         }
     }
-
 
     public class Node<Task> {
         public Task data;

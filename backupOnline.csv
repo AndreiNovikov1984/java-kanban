@@ -7,4 +7,4 @@ id,type,name,status,description,taskStartTime, taskDuration, epic
 5,SUBTASK,Пройти курс,NEW,выполнить все задания,2022-08-13T15:00,60,3
 6,SUBTASK,Найти учебник,NEW,открыть учебник/закрыть учебник,2022-08-13T15:50,15,3
 
-1,2,
+2,1,

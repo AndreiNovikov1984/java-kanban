@@ -7,10 +7,9 @@ import Tasks.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,9 +18,10 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
 
     @Override
     @BeforeEach
-    public void beforeEach() {
-        File backUpFile = new File("testfile.csv");
-        taskManager = new FileBackedTasksManager(backUpFile);
+    public void beforeEach() throws IOException {
+        Path backUpFile = Paths.get("testfile.csv");
+        taskManager = new FileBackedTasksManager();
+        taskManager.setBackUpFile(backUpFile);
         taskManager.createTask(new Task(0, "1", "Таск", "13.08.2022, 10:00", 20));
         taskManager.createTask(new EpicTask(0, "2", "Эпик"));
         taskManager.createTask(new SubTask(0, "3", "Сабтаск", "13.08.2022, 14:00",
@@ -29,64 +29,39 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     }
 
     @Test
-    public void saveInFileStandart() {
-        File savedbackUpFile = new File("testFile.csv");
+    public void saveStandart() {
+        Path savedbackUpFile = Paths.get("testFile.csv");
         taskManager.save();
         assertNotNull(savedbackUpFile, "Файл не создается");
     }
 
     @Test
-    public void saveInFileClearTask() {
-        File savedbackUpFile = new File("testFile.csv");
+    public void saveWithClearTask() {
+        Path savedbackUpFile = Paths.get("testFile.csv");
         taskManager.clearTaskList();
         taskManager.save();
         assertNotNull(savedbackUpFile, "Файл не создается");
     }
 
     @Test
-    public void saveInFileClearEpicTask() {
-        File savedbackUpFile = new File("testFile.csv");
+    public void saveWithClearEpicTask() {
+        Path savedbackUpFile = Paths.get("testFile.csv");
         taskManager.clearEpicTaskList();
         taskManager.save();
         assertNotNull(savedbackUpFile, "Файл не создается");
     }
 
     @Test
-    public void saveInFileClearSubTask() {
-        File savedbackUpFile = new File("testFile.csv");
+    public void saveWithClearSubTask() {
+        Path savedbackUpFile = Paths.get("testFile.csv");
         taskManager.clearSubTaskList();
         taskManager.save();
         assertNotNull(savedbackUpFile, "Файл не создается");
     }
 
     @Test
-    public void getPrioritizedTasks() {
-        final Set<Task> setTask = taskManager.getPrioritizedTasks();
-        int k = 0;
-        for (Task task : setTask) {
-            if (k == 0) {
-                assertEquals(task, taskManager.getlistTask().get(1));
-            }
-            if (k == 1) {
-                assertEquals(task, taskManager.getlistSubTask().get(3));
-            }
-            k++;
-        }
-    }
-
-    @Test
-    public void validateTaskTime() {
-        List<Integer> testValid = new ArrayList<>();
-        testValid.add(1);
-        testValid.add(3);
-        taskManager.createTask(new Task(0, "4", "Таск", "13.08.2022, 10:10", 300));
-        List<Integer> valid = taskManager.validateTaskTime(taskManager.getTaskByNumber(4));
-        assertEquals(valid, testValid);
-    }
-
-    @Test
-    public void loadfromFile() {
-        File backUpFile = new File("testfile.csv");
+    public void load() {
+        Path backUpFile = Paths.get("testfile.csv");
         taskManager.getTaskByNumber(1);
         FileBackedTasksManager taskManager1 = FileBackedTasksManager.loadFromFile(backUpFile);
         assertEquals(taskManager1.getHistory(), taskManager.getHistory());
@@ -96,8 +71,8 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     }
 
     @Test
-    public void loadfromFileEmptyHistory() {
-        File backUpFile = new File("testfile.csv");
+    public void loadWithEmptyHistory() {
+        Path backUpFile = Paths.get("testfile.csv");
         FileBackedTasksManager taskManager1 = FileBackedTasksManager.loadFromFile(backUpFile);
         assertEquals(taskManager1.getHistory(), taskManager.getHistory());
         assertEquals(taskManager1.getTaskByNumber(1), taskManager.getTaskByNumber(1));
@@ -106,8 +81,8 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     }
 
     @Test
-    public void loadfromFileEmptyTask() {
-        File backUpFile = new File("testfile.csv");
+    public void loadWithEmptyTask() {
+        Path backUpFile = Paths.get("testfile.csv");
         taskManager.clearTaskList();
         taskManager.clearEpicTaskList();
         FileBackedTasksManager taskManager1 = FileBackedTasksManager.loadFromFile(backUpFile);
@@ -118,8 +93,8 @@ class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager>
     }
 
     @Test
-    public void loadfromFileEmptySub() {
-        File backUpFile = new File("testfile.csv");
+    public void loadWithEmptySub() {
+        Path backUpFile = Paths.get("testfile.csv");
         taskManager.clearSubTaskList();
         FileBackedTasksManager taskManager1 = FileBackedTasksManager.loadFromFile(backUpFile);
         assertEquals(taskManager1.getHistory(), taskManager.getHistory());

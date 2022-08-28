@@ -2,11 +2,12 @@ package Managers;
 
 import Tasks.*;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,15 +15,19 @@ import java.util.Set;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
-    private final File backUpFile;
+    private Path backUpFilePath;
 
-    public FileBackedTasksManager(File backUpFile) {
-        this.backUpFile = backUpFile;
+    public FileBackedTasksManager() {
+        this.backUpFilePath = Paths.get("backup.csv");
+    }
+
+    public void setBackUpFile(Path backUpFilePath) {
+        this.backUpFilePath = backUpFilePath;
     }
 
     public static void main(String[] args) {
-        File backUpFile = new File("backup.csv");
-        FileBackedTasksManager taskManager = new FileBackedTasksManager(backUpFile);
+        Path backUpFilePath = Paths.get("backup.csv");
+        FileBackedTasksManager taskManager = new FileBackedTasksManager();
         taskManager.createTask(new Task(0, "Переезд", "Собрать вещи перевезти разобрать",
                 "13.08.2022, 10:00", 20));
         taskManager.createTask(new EpicTask(0, "Обучение Java",
@@ -44,7 +49,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         taskManager.getTaskByNumber(6);
         taskManager.getPrioritizedTasks();
 
-        FileBackedTasksManager taskManager1 = loadFromFile(backUpFile);
+        FileBackedTasksManager taskManager1 = loadFromFile(backUpFilePath);
         System.out.println(taskManager1.getlistTask());
         System.out.println(taskManager1.getlistEpicTask());
         System.out.println(taskManager1.getlistSubTask());
@@ -95,7 +100,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public void createTask(Task task) {      // метод создания задачи
         super.createTask(task);
         save();
-        validateTaskTime(task);
     }
 
     @Override
@@ -108,14 +112,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public void createTask(SubTask subTask) {        // метод создания подзадачи
         super.createTask(subTask);
         save();
-        validateTaskTime(subTask);
     }
 
     @Override
     public void refreshTask(Task task) {                    // метод обновление задачи
         super.refreshTask(task);
         save();
-        validateTaskTime(task);
     }
 
     @Override
@@ -128,7 +130,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public void refreshTask(SubTask subTask) {       // метод обновление подзадачи
         super.refreshTask(subTask);
         save();
-        validateTaskTime(subTask);
     }
 
     @Override
@@ -153,7 +154,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return historyGet;
     }
 
-    public void save() {
+    public String save() {                // метод сохранения в файл
         StringBuilder saveString = new StringBuilder("id,type,name,status,description,taskStartTime, taskDuration, epic\n");
         Sort.sort(getlistTask(), getlistSubTask());
         for (Task task : getlistTask().values()) {
@@ -166,11 +167,13 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             saveString.append(Convert.toString(subTask));
         }
         saveString.append("\n" + Convert.toString(super.getHistoryManager()));
-        try (Writer fileWriter = new FileWriter(backUpFile.toString(), false)) {
+
+        try (Writer fileWriter = new FileWriter(backUpFilePath.toString(), false)) {
             fileWriter.write(saveString.toString());
         } catch (IOException exception) {
             System.out.println("Данные не сохранены");
         }
+        return saveString.toString();
     }
 
     @Override
@@ -183,10 +186,10 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return super.validateTaskTime(task);
     }
 
-    public static FileBackedTasksManager loadFromFile(File backUpFile) {      // метод загрузки данных из файла
-        FileBackedTasksManager taskManager = new FileBackedTasksManager(backUpFile);
+    public static FileBackedTasksManager loadFromFile(Path backUpFile) {      // метод загрузки данных из файла
+        FileBackedTasksManager taskManager = new FileBackedTasksManager();
         try {
-            String value = Files.readString(backUpFile.toPath());
+            String value = Files.readString(backUpFile);
             String[] lines = value.split("\n");
             int maxID = 0;
             for (int i = 1; i < lines.length; i++) {

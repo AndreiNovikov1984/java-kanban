@@ -52,5 +52,6 @@ public class EpicTask extends Task {
     public void setEpicTaskDuration(Duration taskDuration) {
         this.taskDuration = taskDuration;
     }
+
 }
 
