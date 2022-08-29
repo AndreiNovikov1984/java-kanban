@@ -8,7 +8,7 @@ import java.net.http.HttpResponse;
 
 public class KVTaskClient {
     private static final int PORT = 8078;
-    public String host;
+    private final String host;
     private final String token;
     private final HttpClient client = HttpClient.newHttpClient();
     private final HttpResponse.BodyHandler<String> handler = HttpResponse.BodyHandlers.ofString();
