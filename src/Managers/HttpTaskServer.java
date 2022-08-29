@@ -23,7 +23,7 @@ public class HttpTaskServer {
     private static final int PORT = 8080;
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
     private final HttpServer httpTaskServer;
-    private static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
     public HttpTaskServer() throws IOException {
         FileBackedTasksManager taskManager = FileBackedTasksManager.loadFromFile(Paths.get("backupOnline.csv"));
@@ -52,15 +52,9 @@ public class HttpTaskServer {
                 case "GET":
                     if ((splitPath.length == 2) && (splitPath[1].equals("tasks"))) {
                         ArrayList<Task> listTask = new ArrayList<>();
-                        for (Task task : taskManager.getlistTask().values()) {
-                            listTask.add(task);
-                        }
-                        for (Task task : taskManager.getlistEpicTask().values()) {
-                            listTask.add(task);
-                        }
-                        for (Task task : taskManager.getlistSubTask().values()) {
-                            listTask.add(task);
-                        }
+                        listTask.addAll(taskManager.getlistTask().values());
+                        listTask.addAll(taskManager.getlistEpicTask().values());
+                        listTask.addAll(taskManager.getlistSubTask().values());
                         response = gson.toJson(listTask);
                         break;
                     }
@@ -148,11 +142,10 @@ public class HttpTaskServer {
                         if (splitPath.length == 3) {
                             taskManager.clearTaskList();
                             response = "Delete! Удалены все задачи";
-                            break;
                         } else {
                             response = "Error! Ошибка в URI! Введите корректный адрес";
-                            break;
                         }
+                        break;
                     }
                     if (splitPath[2].equals("epic")) {
                         taskManager.clearEpicTaskList();
@@ -162,11 +155,10 @@ public class HttpTaskServer {
                     if (splitPath[2].equals("subtask")) {
                         taskManager.clearSubTaskList();
                         response = "Delete! Удалены все подзадачи";
-                        break;
                     } else {
                         response = "Error! Ошибка в URI! Введите корректный адрес";
-                        break;
                     }
+                    break;
             }
             if (response == null) {
                 httpExchange.sendResponseHeaders(400, 0);

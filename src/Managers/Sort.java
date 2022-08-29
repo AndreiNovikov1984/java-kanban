@@ -17,22 +17,20 @@ public class Sort {
             }
             if (task1.getTaskStartTime().isAfter(task2.getTaskStartTime())) {
                 return 5;
+            } else if (task1.getTaskStartTime().equals(task2.getTaskStartTime())) {
+                return 0;
             } else {
                 return -5;
             }
         }
     };
 
-    private static Set<Task> sortedTaskTree = new TreeSet<>(taskComparator);
+    private static final Set<Task> sortedTaskTree = new TreeSet<>(taskComparator);
 
     protected static void sort(Map<Integer, Task> listTask, Map<Integer, SubTask> listSubTask) {
         sortedTaskTree.clear();
-        for (Task task : listTask.values()) {
-            sortedTaskTree.add(task);
-        }
-        for (SubTask task : listSubTask.values()) {
-            sortedTaskTree.add(task);
-        }
+        sortedTaskTree.addAll(listTask.values());
+        sortedTaskTree.addAll(listSubTask.values());
     }
 
     public static Set<Task> getSortedTaskTree() {

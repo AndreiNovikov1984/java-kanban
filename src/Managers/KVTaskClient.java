@@ -7,11 +7,11 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class KVTaskClient {
-    public static final int PORT = 8078;
+    private static final int PORT = 8078;
     public String host;
     private final String token;
-    private HttpClient client = HttpClient.newHttpClient();
-    private HttpResponse.BodyHandler<String> handler = HttpResponse.BodyHandlers.ofString();
+    private final HttpClient client = HttpClient.newHttpClient();
+    private final HttpResponse.BodyHandler<String> handler = HttpResponse.BodyHandlers.ofString();
 
     public KVTaskClient(String host) {
         this.host = host;

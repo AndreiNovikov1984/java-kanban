@@ -12,10 +12,10 @@ import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    final private Map<Integer, Task> listTask = new HashMap<>();
-    final private Map<Integer, EpicTask> listEpicTask = new HashMap<>();
-    final private Map<Integer, SubTask> listSubTask = new HashMap<>();
-    private InMemoryHistoryManager historyManager = Managers.getDefaultHistory();
+    private final Map<Integer, Task> listTask = new HashMap<>();
+    private final Map<Integer, EpicTask> listEpicTask = new HashMap<>();
+    private final Map<Integer, SubTask> listSubTask = new HashMap<>();
+    private final InMemoryHistoryManager historyManager = Managers.getDefaultHistory();
     protected Integer identificator = 0;
 
     @Override

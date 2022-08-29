@@ -15,8 +15,8 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class HttpTaskManagerTest extends FileBackedTasksManagerTest {
-    KVServer serverKV;
-    String savedbackUp;
+    private KVServer serverKV;
+    private String savedbackUp;
 
     @Override
     @BeforeEach

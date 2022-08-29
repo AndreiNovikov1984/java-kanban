@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.Set;
 
 public class HttpTaskManager extends FileBackedTasksManager {
-    public String host;
-    public String userName;
+    private final String host;
+    private final String userName;
 
-    private KVTaskClient clientKVServer;
+    private final KVTaskClient clientKVServer;
 
     public HttpTaskManager(String host, String userName) {
         this.clientKVServer = new KVTaskClient(host);
